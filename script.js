@@ -12,8 +12,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <label for="group-level">Level:</label>
             <input type="number" class="group-level" min="1" value="1">
+
+            <button class="remove-group">X</button>
         `;
         partyInput.appendChild(newGroup);
+    });
+
+    partyInput.addEventListener("click", (event) => {
+        if (event.target.classList.contains("remove-group")) {
+            event.target.parentNode.remove();
+        }
     });
 
     function calculateTotalPartyLevel() {
