@@ -5,8 +5,18 @@
 </head>
 <body>
     <h1>Kobold Fight Club</h1>
-    <label for="party-level">Party Level:</label>
-    <input type="number" id="party-level" min="1" value="1">
+    
+    <div id="party-input">
+        <div class="player-group">            
+            <label for="group-players">Players:</label>
+            <input type="number" class="group-players" min="1" value="1">
+
+            <label for="group-level">Level:</label>
+            <input type="number" class="group-level" min="1" value="1">
+        </div>
+    </div>
+    
+    <button id="add-group">Add Group</button>
     
     <h2>Monsters:</h2>
     <ul id="monster-list">

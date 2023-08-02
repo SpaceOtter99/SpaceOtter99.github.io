@@ -1,9 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const partyLevelInput = document.getElementById("party-level");
+    const partyInput = document.getElementById("party-input");
+    const addGroupButton = document.getElementById("add-group");
     const monsterList = document.getElementById("monster-list");
 
-    partyLevelInput.addEventListener("input", () => {
-        const partyLevel = parseInt(partyLevelInput.value);
+    addGroupButton.addEventListener("click", () => {
+        const newGroup = document.createElement("div");
+        newGroup.className = "player-group";
+        newGroup.innerHTML = `
+            <label for="group-players">Players:</label>
+            <input type="number" class="group-players" min="1" value="1">
+
+            <label for="group-level">Level:</label>
+            <input type="number" class="group-level" min="1" value="1">
+        `;
+        partyInput.appendChild(newGroup);
+    });
+
+    function calculateTotalPartyLevel() {
+        let totalLevel = 0;
+        const groupElements = document.querySelectorAll(".player-group");
+        
+        groupElements.forEach(group => {
+            const groupLevel = parseInt(group.querySelector(".group-level").value);
+            const groupPlayers = parseInt(group.querySelector(".group-players").value);
+            totalLevel += groupLevel * groupPlayers;
+        });
+        console.log(totalLevel);
+        return totalLevel;
+    }
+
+    function fetchMonstersForPartyLevel(partyLevel) {
         monsterList.innerHTML = ""; // Clear existing list
 
         fetch("monsters.csv")
@@ -22,5 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => {
                 console.error("Error fetching monster data:", error);
             });
+    }
+
+    partyInput.addEventListener("input", () => {
+        const totalPartyLevel = calculateTotalPartyLevel();
+        fetchMonstersForPartyLevel(totalPartyLevel);
     });
 });
