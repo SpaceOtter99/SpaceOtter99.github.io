@@ -16,11 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="remove-group">X</button>
         `;
         partyInput.appendChild(newGroup);
+        updateMonsterList();
     });
 
     partyInput.addEventListener("click", (event) => {
         if (event.target.classList.contains("remove-group")) {
             event.target.parentNode.remove();
+            updateMonsterList();
         }
     });
 
@@ -59,7 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     partyInput.addEventListener("input", () => {
+        updateMonsterList();
+    });
+
+    function updateMonsterList() {        
         const totalPartyLevel = calculateTotalPartyLevel();
         fetchMonstersForPartyLevel(totalPartyLevel);
-    });
+    }
 });
