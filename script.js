@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const pageNumbersContainer = document.getElementById("page-numbers");
         pageNumbersContainer.innerHTML = "";
 
+        console.log("I am here");
+
         const pageNumbersToShow = Math.min(maxVisiblePages, totalPages);
         const currentPageIndex = currentPage - 1;
 
@@ -166,7 +168,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     partyInput.addEventListener("input", () => {
-        console.log("Input fired")
         updateMonsterList();
     });
 
@@ -177,8 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
         playerInput.addEventListener("input", updateMonsterList);
         levelInput.addEventListener("input", updateMonsterList);
     }
-
-    attachInputListeners(partyInput.querySelector("player-group"));
 
     function addGroup() {
         const newGroup = document.createElement("div");
@@ -203,6 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
         attachInputListeners(newGroup); // Attach listeners to the new group
         updateMonsterList();
     }
+    addGroup();
 
     function updateMonsterList() {        
         const totalPartyLevel = calculateTotalPartyLevel();

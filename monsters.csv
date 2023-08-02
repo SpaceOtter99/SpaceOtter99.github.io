@@ -251,7 +251,6 @@
 4, Ogre Berserker, Large, Wrecker, Giant, Bestiary, 149
 4, Ogre Crusader, Large, Troop, Giant, Bestiary, 150
 4, Orc Boatmen, Normal, Spoiler, Humanoid, Eyes Of The Stone Thief, 57
-7, Orc Sniper, Normal, Archer, Humanoid, Eyes Of The Stone Thief, 288
 4, Owl Bear, Large, Wrecker, Beast, Core Rulebook, 243
 4, Phantomaton, Normal, Troop, Undead, Bestiary 2, 248
 4, Purple Dragon (Adventurer), Huge, Caster, Dragon, Bestiary 2, 186
@@ -477,7 +476,6 @@
 6, Wild Oread, Doublestrength, Spoiler, Elemental, Bestiary 2, 207
 6, Winter Beast, Normal, Troop, Undead, Eyes Of The Stone Thief, 241
 6, Wyrmtwine Worms, Normal, Mook, Dragon, Eyes Of The Stone Thief, 238
-8, Rakshasa Delver, Doublestrength, Caster, Humanoid, Bestiary 2, 225
 7, Animated Halberd, Normal, Mook, Construct, Eyes Of The Stone Thief, 231
 7, Barbed Vines, Normal, Mook, Plant, Bestiary 2, 25
 7, Bergship Raider, Large, Spoiler, Giant, Bestiary, 77
@@ -552,8 +550,9 @@
 7, Necromagus, Normal, Caster, Undead, Eyes Of The Stone Thief, 126/Td>
 7, Odma The Seer, Double-Strength, Caster, Humanoid, Eyes Of The Stone Thief, 322
 7, Ogre Mage, Large, Caster, Giant, Core Rulebook, 240
-7, Ogre Stalker, Large, Wrecker, Giant, Eyes Of The Stone Thief, 164
 7, Orc Rager, Normal, Mook, Humanoid, Core Rulebook, 242
+7, Ogre Stalker, Large, Wrecker, Giant, Eyes Of The Stone Thief, 164
+7, Orc Sniper, Normal, Archer, Humanoid, Eyes Of The Stone Thief, 288
 7, Pale Lizard, Normal, Spoiler, Beast, Eyes Of The Stone Thief, 95
 7, Phase Spider, Large, Wrecker, Beast, Core Rulebook, 244
 7, Plague Zombies Ghost, Normal, Mook, Undead, Eyes Of The Stone Thief, 233
@@ -666,6 +665,7 @@
 8, Purple Dragon (Champion), Huge, Caster, Dragon, Bestiary 2, 186
 8, Purple Larvae, Normal, Mook, Beast, Bestiary, 165
 8, Purple Worm, Huge, Wrecker, Beast, Bestiary, 164
+8, Rakshasa Delver, Doublestrength, Caster, Humanoid, Bestiary 2, 225
 8, Remorhaz (Adult), Large, Wrecker, Beast, Bestiary, 180
 8, Ripper Clockworker, Normal, Mook, Construct, Eyes Of The Stone Thief, 199
 8, Rootrot Mossmen, Normal, Caster, Plant, Eyes Of The Stone Thief, 238
