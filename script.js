@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const monstersPerPage = 10;
+    let currentPage = 1;
+
     const partyInput = document.getElementById("party-input");
     const addGroupButton = document.getElementById("add-group");
     const monsterList = document.getElementById("monster-list");
@@ -26,6 +29,83 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    function updatePageNumbers(totalPages) {
+        const pageNumbersContainer = document.getElementById("page-numbers");
+        pageNumbersContainer.innerHTML = "";
+
+        const maxVisiblePages = 5;
+        const pageNumbersToShow = Math.min(maxVisiblePages, totalPages);
+        const currentPageIndex = currentPage - 1;
+
+        if (totalPages <= maxVisiblePages) {
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbersContainer.appendChild(createPageNumberButton(i));
+            }
+        } else {
+            if (currentPageIndex <= 2) {
+                for (let i = 1; i <= pageNumbersToShow; i++) {
+                    pageNumbersContainer.appendChild(createPageNumberButton(i));
+                }
+                pageNumbersContainer.appendChild(createEllipsis());
+                pageNumbersContainer.appendChild(createPageNumberButton(totalPages));
+            } else if (currentPageIndex >= totalPages - 3) {
+                pageNumbersContainer.appendChild(createPageNumberButton(1));
+                pageNumbersContainer.appendChild(createEllipsis());
+                for (let i = totalPages - pageNumbersToShow + 1; i <= totalPages; i++) {
+                    pageNumbersContainer.appendChild(createPageNumberButton(i));
+                }
+            } else {
+                pageNumbersContainer.appendChild(createPageNumberButton(1));
+                pageNumbersContainer.appendChild(createEllipsis());
+                for (let i = currentPageIndex - 1; i <= currentPageIndex + 1; i++) {
+                    pageNumbersContainer.appendChild(createPageNumberButton(i + 1));
+                }
+                pageNumbersContainer.appendChild(createEllipsis());
+                pageNumbersContainer.appendChild(createPageNumberButton(totalPages));
+            }
+        }
+    }
+
+    function createPageNumberButton(pageNumber) {
+        const button = document.createElement("button");
+        button.textContent = pageNumber;
+        button.addEventListener("click", () => {
+            currentPage = pageNumber;
+            updateMonsterPage();
+        });
+        return button;
+    }
+
+    function createEllipsis() {
+        const ellipsis = document.createElement("span");
+        ellipsis.textContent = "...";
+        return ellipsis;
+    }
+
+    document.getElementById("prev-page").addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            updateMonsterPage();
+        }
+    });
+
+    document.getElementById("next-page").addEventListener("click", () => {
+        const totalMonsters = document.querySelectorAll("#monster-list tr").length;
+        const totalPages = Math.ceil(totalMonsters / monstersPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            updateMonsterPage();
+        }
+    });
+
+    function updateMonsterPage() {
+        const totalPartyLevel = calculateTotalPartyLevel();
+        fetchMonstersForPartyLevel(totalPartyLevel, currentPage);
+
+        const totalPages = Math.ceil(totalMonsters / monstersPerPage);
+        updatePageNumbers(totalPages);
+    }
+
     function calculateTotalPartyLevel() {
         let totalLevel = 0;
         const groupElements = document.querySelectorAll(".player-group");
@@ -39,25 +119,42 @@ document.addEventListener("DOMContentLoaded", () => {
         return totalLevel;
     }
 
-    function fetchMonstersForPartyLevel(partyLevel) {
-        monsterList.innerHTML = ""; // Clear existing list
+    function fetchMonstersForPartyLevel(partyLevel, pageNumber) {
+    const startIndex = (pageNumber - 1) * monstersPerPage;
+    const endIndex = startIndex + monstersPerPage;
 
-        fetch("monsters.csv")
-            .then(response => response.text())
-            .then(data => {
-                const lines = data.split("\n");
-                for (const line of lines) {
-                    const [level, name, size, role, type, source, page] = line.split(",");
-                    if (!isNaN(level) && parseInt(level) <= partyLevel) {
-                        const monsterItem = document.createElement("li");
-                        monsterItem.textContent = `${name} (Level ${level}) - ${size}, ${role}, ${type} - ${source} (Page ${page})`;
-                        monsterList.appendChild(monsterItem);
+    const monsterTable = document.getElementById("monster-table");
+    const monsterTbody = monsterTable.querySelector("tbody");
+    monsterTbody.innerHTML = ""; // Clear existing table body
+
+    fetch("monsters.csv")
+        .then(response => response.text())
+        .then(data => {
+            const lines = data.split("\n");
+            let count = 0;
+            for (const line of lines) {
+                const [level, name, size, role, type, source, page] = line.split(",");
+                if (!isNaN(level) && parseInt(level) <= partyLevel) {
+                    if (count >= startIndex && count < endIndex) {
+                        const monsterRow = document.createElement("tr");
+                        monsterRow.innerHTML = `
+                            <td>${name}</td>
+                            <td>${level}</td>
+                            <td>${size}</td>
+                            <td>${role}</td>
+                            <td>${type}</td>
+                            <td>${source}</td>
+                            <td>${page}</td>
+                        `;
+                        monsterTbody.appendChild(monsterRow);
                     }
+                    count++;
                 }
-            })
-            .catch(error => {
-                console.error("Error fetching monster data:", error);
-            });
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching monster data:", error);
+        });
     }
 
     partyInput.addEventListener("input", () => {
