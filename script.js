@@ -118,7 +118,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const lines = data.split("\n");
             let count = 0;
             for (const line of lines) {
-                const [level, name, size, role, type, source, page] = line.split(",");
+                const values = line.split(",");
+                const level = parseInt(values[0]);
+                const name = values[1];
+                const size = values[2];
+                const role = values[3];
+                const type = values[4];
+                const source = values[5];
+                const page = values[6];
                 if (!isNaN(level) && parseInt(level) <= partyLevel + 1 && parseInt(level) >= partyLevel - 1) {
                     if (count >= startIndex && count < endIndex) {
                         const monsterRow = document.createElement("tr");
@@ -156,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
         levelInput.addEventListener("input", updateMonsterList);
     }
 
-    attachInputListeners(document.getElementById("player-group"));
+    attachInputListeners(partyInput.querySelector("player-group"));
 
     function addGroup() {
         const newGroup = document.createElement("div");
