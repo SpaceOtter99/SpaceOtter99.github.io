@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const monstersPerPage = 10;
+    const maxVisiblePages = 5;
     let currentPage = 1;
 
     const partyInput = document.getElementById("party-input");
@@ -33,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const pageNumbersContainer = document.getElementById("page-numbers");
         pageNumbersContainer.innerHTML = "";
 
-        const maxVisiblePages = 5;
         const pageNumbersToShow = Math.min(maxVisiblePages, totalPages);
         const currentPageIndex = currentPage - 1;
 
@@ -82,22 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return ellipsis;
     }
 
-    document.getElementById("prev-page").addEventListener("click", () => {
-        if (currentPage > 1) {
-            currentPage--;
-            updateMonsterPage();
-        }
-    });
-
-    document.getElementById("next-page").addEventListener("click", () => {
-        const totalMonsters = document.querySelectorAll("#monster-list tr").length;
-        const totalPages = Math.ceil(totalMonsters / monstersPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            updateMonsterPage();
-        }
-    });
-
     function updateMonsterPage() {
         const totalPartyLevel = calculateTotalPartyLevel();
         fetchMonstersForPartyLevel(totalPartyLevel, currentPage);
@@ -123,8 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const startIndex = (pageNumber - 1) * monstersPerPage;
     const endIndex = startIndex + monstersPerPage;
 
-    const monsterTable = document.getElementById("monster-table");
-    const monsterTbody = monsterTable.querySelector("tbody");
+    const monsterTbody = document.getElementById("monster-list");
     monsterTbody.innerHTML = ""; // Clear existing table body
 
     fetch("monsters.csv")
@@ -134,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let count = 0;
             for (const line of lines) {
                 const [level, name, size, role, type, source, page] = line.split(",");
-                if (!isNaN(level) && parseInt(level) <= partyLevel) {
+                if (!isNaN(level) && parseInt(level) <= partyLevel + 1 && parseInt(level) >= partyLevel - 1) {
                     if (count >= startIndex && count < endIndex) {
                         const monsterRow = document.createElement("tr");
                         monsterRow.innerHTML = `
