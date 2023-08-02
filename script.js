@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const monstersPerPage = 10;
     const maxVisiblePages = 5;
     let currentPage = 1;
+    let totalMonsters = 0;
 
     const partyInput = document.getElementById("party-input");
     const addGroupButton = document.getElementById("add-group");
@@ -83,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateMonsterPage() {
+        console.log("Updating Monster Pages")
         const totalPartyLevel = calculateTotalPartyLevel();
         fetchMonstersForPartyLevel(totalPartyLevel, currentPage);
 
@@ -134,6 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     count++;
                 }
             }
+            totalMonsters = count;
         })
         .catch(error => {
             console.error("Error fetching monster data:", error);
