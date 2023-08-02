@@ -144,8 +144,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     partyInput.addEventListener("input", () => {
+        console.log("Input fired")
         updateMonsterList();
     });
+
+    function attachInputListeners(groupElement) {
+        const playerInput = groupElement.querySelector(".group-players");
+        const levelInput = groupElement.querySelector(".group-level");
+
+        playerInput.addEventListener("input", updateMonsterList);
+        levelInput.addEventListener("input", updateMonsterList);
+    }
+
+    attachInputListeners(document.getElementById("player-group"));
+
+    function addGroup() {
+        const newGroup = document.createElement("div");
+        newGroup.className = "player-group";
+        newGroup.innerHTML = `
+            <label for="group-players">Players:</label>
+            <input type="number" class="group-players" min="1" value="1">
+
+            <label for="group-level">Level:</label>
+            <input type="number" class="group-level" min="1" value="1">
+
+            <button class="remove-group">X</button>
+        `;
+
+        const removeButton = newGroup.querySelector(".remove-group");
+        removeButton.addEventListener("click", () => {
+            newGroup.remove();
+            updateMonsterList();
+        });
+
+        partyInput.appendChild(newGroup);
+        attachInputListeners(newGroup); // Attach listeners to the new group
+        updateMonsterList();
+    }
 
     function updateMonsterList() {        
         const totalPartyLevel = calculateTotalPartyLevel();
