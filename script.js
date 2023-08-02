@@ -118,14 +118,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const lines = data.split("\n");
             let count = 0;
             for (const line of lines) {
-                const values = line.split(",");
-                const level = parseInt(values[0]);
-                const name = values[1];
-                const size = values[2];
-                const role = values[3];
-                const type = values[4];
-                const source = values[5];
-                const page = values[6];
+                const values = parseCSVLine(line);
+                const [level, name, size, role, type, source, page] = values;
+
                 if (!isNaN(level) && parseInt(level) <= partyLevel + 1 && parseInt(level) >= partyLevel - 1) {
                     if (count >= startIndex && count < endIndex) {
                         const monsterRow = document.createElement("tr");
@@ -148,6 +143,26 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(error => {
             console.error("Error fetching monster data:", error);
         });
+    }
+
+    function parseCSVLine(line) {
+        const values = [];
+        let currentVal = "";
+        let withinQuotes = false;
+
+        for (const char of line) {
+            if (char === '"') {
+                withinQuotes = !withinQuotes;
+            } else if (char === ',' && !withinQuotes) {
+                values.push(currentVal.trim());
+                currentVal = "";
+            } else {
+                currentVal += char;
+            }
+        }
+
+        values.push(currentVal.trim());
+        return values;
     }
 
     partyInput.addEventListener("input", () => {
