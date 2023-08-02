@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateMonsterPage() {
-        console.log("Updating Monster Pages")
+        console.log("Updating Monster Pages");
         const totalPartyLevel = calculateTotalPartyLevel();
         fetchMonstersForPartyLevel(totalPartyLevel, currentPage);
 
@@ -149,6 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateMonsterList() {        
         const totalPartyLevel = calculateTotalPartyLevel();
-        fetchMonstersForPartyLevel(totalPartyLevel);
+        fetchMonstersForPartyLevel(totalPartyLevel, currentPage);
     }
 });
