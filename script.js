@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Call fetchMonstersCSV once when the DOM is loaded
     fetchMonstersCSV().then(() => {
+        partyInput.innerHTML = "";
         // Call addGroup function to set up initial UI
         addGroup();
     });
@@ -52,8 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function updatePageNumbers(totalPages) {
         const pageNumbersContainer = document.getElementById("page-numbers");
         pageNumbersContainer.innerHTML = "";
-
-        console.log("I am here");
 
         const pageNumbersToShow = Math.min(maxVisiblePages, totalPages);
         const maxCentrePages = maxVisiblePages - 4;
@@ -111,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function createEllipsis() {
         const ellipsis = document.createElement("span");
+        ellipsis.className = "ellipsis";
         ellipsis.textContent = "...";
         return ellipsis;
     }
@@ -209,10 +209,8 @@ document.addEventListener("DOMContentLoaded", () => {
         attachInputListeners(newGroup); // Attach listeners to the new group
         updateMonsterList();
     }
-    addGroup();
 
     function updateMonsterList() {        
-        console.log("Updating Monster Pages");
         const totalPartyLevel = calculateTotalPartyLevel();
         fetchMonstersForPartyLevel(totalPartyLevel, currentPage);
 
