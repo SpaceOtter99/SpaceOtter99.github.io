@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         button.textContent = pageNumber;
         button.addEventListener("click", () => {
             currentPage = pageNumber;
-            updateMonsterPage();
+            updateMonsterList();
         });
         return button;
     }
@@ -88,15 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const ellipsis = document.createElement("span");
         ellipsis.textContent = "...";
         return ellipsis;
-    }
-
-    function updateMonsterPage() {
-        console.log("Updating Monster Pages");
-        const totalPartyLevel = calculateTotalPartyLevel();
-        fetchMonstersForPartyLevel(totalPartyLevel, currentPage);
-
-        const totalPages = Math.ceil(totalMonsters / monstersPerPage);
-        updatePageNumbers(totalPages);
     }
 
     function calculateTotalPartyLevel() {
@@ -210,7 +201,11 @@ document.addEventListener("DOMContentLoaded", () => {
     addGroup();
 
     function updateMonsterList() {        
+        console.log("Updating Monster Pages");
         const totalPartyLevel = calculateTotalPartyLevel();
         fetchMonstersForPartyLevel(totalPartyLevel, currentPage);
+
+        const totalPages = Math.ceil(totalMonsters / monstersPerPage);
+        updatePageNumbers(totalPages);
     }
 });
