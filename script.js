@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const maxVisiblePages = 9;
     let currentPage = 1;
     let totalMonsters = 0;
+    let monstersData = [];
 
     const partyInput = document.getElementById("party-input");
     const addGroupButton = document.getElementById("add-group");
@@ -29,6 +30,23 @@ document.addEventListener("DOMContentLoaded", () => {
             event.target.parentNode.remove();
             updateMonsterList();
         }
+    });
+
+    function fetchMonstersCSV() {
+        return fetch("monsters.csv")
+            .then(response => response.text())
+            .then(data => {
+                monstersData = data.split("\n").map(line => parseCSVLine(line));
+            })
+            .catch(error => {
+                console.error("Error fetching monster data:", error);
+            });
+    }
+
+    // Call fetchMonstersCSV once when the DOM is loaded
+    fetchMonstersCSV().then(() => {
+        // Call addGroup function to set up initial UI
+        addGroup();
     });
 
     function updatePageNumbers(totalPages) {
@@ -59,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Page number close to end, no final ellipsis
                 pageNumbersContainer.appendChild(createPageNumberButton(1));
                 pageNumbersContainer.appendChild(createEllipsis());
-                for (let i = totalPages - maxVisiblePages + 2; i <= totalPages; i++) {
+                for (let i = totalPages - maxVisiblePages + 3; i <= totalPages; i++) {
                     pageNumbersContainer.appendChild(createPageNumberButton(i));
                 }
             } else {
@@ -78,6 +96,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function createPageNumberButton(pageNumber) {
         const button = document.createElement("button");
         button.textContent = pageNumber;
+        if (pageNumber == currentPage)
+        {
+            button.setAttribute("disabled", "disabled");
+        }
+        button.className = "page-number"
+        
         button.addEventListener("click", () => {
             currentPage = pageNumber;
             updateMonsterList();
@@ -105,43 +129,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function fetchMonstersForPartyLevel(partyLevel, pageNumber) {
-    const startIndex = (pageNumber - 1) * monstersPerPage;
-    const endIndex = startIndex + monstersPerPage;
+        const startIndex = (pageNumber - 1) * monstersPerPage;
+        const endIndex = startIndex + monstersPerPage;
 
-    const monsterTbody = document.getElementById("monster-list");
-    monsterTbody.innerHTML = ""; // Clear existing table body
+        const monsterTbody = document.getElementById("monster-list");
+        monsterTbody.innerHTML = ""; // Clear existing table body
 
-    fetch("monsters.csv")
-        .then(response => response.text())
-        .then(data => {
-            const lines = data.split("\n");
-            let count = 0;
-            for (const line of lines) {
-                const values = parseCSVLine(line);
-                const [level, name, size, role, type, source, page] = values;
-
-                if (!isNaN(level) && parseInt(level) <= partyLevel + 1 && parseInt(level) >= partyLevel - 1) {
-                    if (count >= startIndex && count < endIndex) {
-                        const monsterRow = document.createElement("tr");
-                        monsterRow.innerHTML = `
-                            <td>${name}</td>
-                            <td>${level}</td>
-                            <td>${size}</td>
-                            <td>${role}</td>
-                            <td>${type}</td>
-                            <td>${source}</td>
-                            <td>${page}</td>
-                        `;
-                        monsterTbody.appendChild(monsterRow);
-                    }
-                    count++;
-                }
-            }
-            totalMonsters = count;
-        })
-        .catch(error => {
-            console.error("Error fetching monster data:", error);
+        const filteredMonsters = monstersData.filter(values => {
+            const [level] = values;
+            return !isNaN(level) && parseInt(level) <= partyLevel + 1 && parseInt(level) >= partyLevel - 1;
         });
+
+        for (let i = startIndex; i < endIndex && i < filteredMonsters.length; i++) {
+            const [level, name, size, role, type, source, page] = filteredMonsters[i];
+            const monsterRow = document.createElement("tr");
+            monsterRow.innerHTML = `
+                <td>${name}</td>
+                <td>${level}</td>
+                <td>${size}</td>
+                <td>${role}</td>
+                <td>${type}</td>
+                <td>${source}</td>
+                <td>${page}</td>
+            `;
+            monsterTbody.appendChild(monsterRow);
+        }
+
+        totalMonsters = filteredMonsters.length;
     }
 
     function parseCSVLine(line) {
