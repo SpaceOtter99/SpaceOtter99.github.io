@@ -13,13 +13,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const newGroup = document.createElement("div");
         newGroup.className = "player-group";
         newGroup.innerHTML = `
-            <label class="group-players-label" for="group-players">Players:</label>
+            <label class="group-players-label">Players:</label>
 
             <label class="group-level-label" for="group-level">Level:</label>
 
-            <div> </div>
-
             <input type="number" class="group-players" min="1" value="1">
+
+            <div class="group-center"> </div>
 
             <input type="number" class="group-level" min="1" value="1">
 

@@ -65,15 +65,31 @@ h2 {
 }
 
 .group-players-label {
-    column-span: 2;
+    grid-column: span 2 / span 2;
 }
 
 .group-players {
     padding: 6px 0 6px 6px;
 }
 
-.group-level-label {
+.group-center {
+    position: relative;
+}
 
+.group-center:after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: "\d7";
+    color: #FFF;
+    font-size: 36px;
+    text-align: center;
+}
+
+.group-level-label {
+    grid-column: span 2 / span 2;
 }
 
 .group-level {
@@ -92,6 +108,7 @@ h2 {
     right: 0;
     content: "\d7";
     color: #FFF;
+    font-size: 36px;
     text-align: center;
 }
 
