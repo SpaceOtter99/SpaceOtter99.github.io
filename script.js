@@ -163,10 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return values;
     }
 
-    partyInput.addEventListener("input", () => {
-        updateMonsterList();
-    });
-
     function attachInputListeners(groupElement) {
         const playerInput = groupElement.querySelector(".group-players");
         const levelInput = groupElement.querySelector(".group-level");
