@@ -20,9 +20,12 @@ body {
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: 4fr 9fr;
+}
+
+.monster-div, .player-div {
+    padding: 30px;
 }
 
 h1 {

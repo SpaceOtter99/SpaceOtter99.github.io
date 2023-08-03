@@ -1,43 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Koru Fight Club</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <script src="https://kit.fontawesome.com/7f9c029c83.js" crossorigin="anonymous"></script>
+	<title>Koru Fight Club</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="https://kit.fontawesome.com/7f9c029c83.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Koru Fight Club</h1>
-    
-    <div id="party-input">
-        <p> Loading... </p>
-    </div>
-    
-    <button id="add-group">Add Group</button>
-    
-    <h2>Monsters:</h2>
-    <table id="monster-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Level</th>
-                <th>Size</th>
-                <th>Role</th>
-                <th>Type</th>
-                <th>Source</th>
-                <th>Page</th>
-            </tr>
-        </thead>
-        <tbody id="monster-list">
-            <!-- Monster data will be displayed here -->
-            
-        </tbody>
-    </table>
+	<h1>Koru Fight Club</h1>
 
-    <div id="page-numbers">
-        <button> Blank </button>
-    </div>
+	<div class="container">
+	
+	<div class="player-div">
+	<div id="party-input">
+		<p> Loading... </p>
+	</div>
+	
+	<button id="add-group">Add Group</button>
+	</div>
 
+	<div class="monster-div">
+		<h2>Monsters:</h2>
+		<table id="monster-table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Level</th>
+					<th>Size</th>
+					<th>Role</th>
+					<th>Type</th>
+					<th>Source</th>
+					<th>Page</th>
+				</tr>
+			</thead>
+			<tbody id="monster-list">
+				<!-- Monster data will be displayed here -->
+				
+			</tbody>
+		</table>
 
-    <script src="script.js"></script>
+		<div id="page-numbers">
+			<button> Blank </button>
+		</div>
+	</div>
+	</div>
+
+	<script src="script.js"></script>
 </body>
 </html>
