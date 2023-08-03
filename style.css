@@ -1,3 +1,11 @@
+:root {
+    --bg: #f0f0f0;
+    --text: #333;
+    --main: #fff;
+    --border: #ddd;
+}
+
+
 /* Reset some default styles */
 body, h1, h2, p, ul, li, button {
     margin: 0;
@@ -6,8 +14,8 @@ body, h1, h2, p, ul, li, button {
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: var(--bg);
+    color: var(--text);
     line-height: 1.6;
 }
 
@@ -30,9 +38,15 @@ h2 {
 }
 
 #party-input {
+    background-color: var(--main);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+}
+/*
+#party-input {
     padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: var(--main);
+    border: 1px solid var(--border);
     border-radius: 5px;
     margin-bottom: 20px;
 }
@@ -42,22 +56,43 @@ h2 {
     font-weight: bold;
     margin-bottom: 5px;
 }
-
-.group-input {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+*/
+.player-group {
+    display: grid;
+    grid-template-rows: 18px 1fr;
+    grid-template-columns: 1fr 40px 1fr 36px;
+    row-gap:.5rem
 }
 
-.group-input label {
-    margin-right: 10px;
+.group-players-label {
+    column-span: 2;
 }
 
-.group-input input {
-    width: 60px;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
+.group-players {
+    padding: 6px 0 6px 6px;
+}
+
+.group-level-label {
+
+}
+
+.group-level {
+    padding: 6px 0 6px 6px;
+}
+
+.remove-group {
+    position: relative;
+}
+
+.remove-group:after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: "\d7";
+    color: #FFF;
+    text-align: center;
 }
 
 #add-group {
@@ -100,15 +135,14 @@ h2 {
 .page-number {
     padding: 5px 10px;
     background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 3px;
+    border: 0;
     cursor: pointer;
     margin: 0 2px;
-    transition: background-color 0.3s ease;
+    transition: border-top 0.7s ease;
 }
 
 .page-number:hover {
-    background-color: #f0f0f0;
+    border-top: 5px solid ;
 }
 
 .page-number[disabled] {

@@ -13,13 +13,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const newGroup = document.createElement("div");
         newGroup.className = "player-group";
         newGroup.innerHTML = `
-            <label for="group-players">Players:</label>
+            <label class="group-players-label" for="group-players">Players:</label>
+
+            <label class="group-level-label" for="group-level">Level:</label>
+            
             <input type="number" class="group-players" min="1" value="1">
 
-            <label for="group-level">Level:</label>
             <input type="number" class="group-level" min="1" value="1">
 
-            <button class="remove-group">X</button>
+            <button class="remove-group"></button>
         `;
         partyInput.appendChild(newGroup);
         updateMonsterList();
@@ -109,8 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function createEllipsis() {
-        const ellipsis = document.createElement("span");
+        const ellipsis = document.createElement("button");
         ellipsis.className = "ellipsis";
+        button.setAttribute("disabled", "disabled");
         ellipsis.textContent = "...";
         return ellipsis;
     }
