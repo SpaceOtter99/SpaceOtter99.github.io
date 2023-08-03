@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const monstersPerPage = 10;
-    const maxVisiblePages = 7;
+    const maxVisiblePages = 9;
     let currentPage = 1;
     let totalMonsters = 0;
 
@@ -38,7 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("I am here");
 
         const pageNumbersToShow = Math.min(maxVisiblePages, totalPages);
-        const maxCentrePages = Math.floor((maxVisiblePages - 4) / 2);
+        const maxCentrePages = maxVisiblePages - 4;
+        const centrePageGap = Math.floor(maxCentrePages / 2);
 
 
         if (totalPages <= maxVisiblePages) {
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 pageNumbersContainer.appendChild(createPageNumberButton(i));
             }
         } else {
-            if (currentPage <= maxVisiblePages - 2)
+            if (currentPage <= maxCentrePages)
             {
                 // Page number close to start, no initial ellipsis
                 for (let i = 1; i <= maxVisiblePages - 2; i++) {
@@ -54,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 pageNumbersContainer.appendChild(createEllipsis());
                 pageNumbersContainer.appendChild(createPageNumberButton(totalPages));
-            } else if (currentPage >= totalPages - maxVisiblePages + 2) {
+            } else if (currentPage >= totalPages - maxCentrePages) {
                 // Page number close to end, no final ellipsis
                 pageNumbersContainer.appendChild(createPageNumberButton(1));
                 pageNumbersContainer.appendChild(createEllipsis());
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 //Somewhere in the middle, ellipsis both sides
                 pageNumbersContainer.appendChild(createPageNumberButton(1));
                 pageNumbersContainer.appendChild(createEllipsis());
-                for (let i =  currentPage - maxCentrePages; i <= currentPage + maxCentrePages; i++) {
+                for (let i =  currentPage - centrePageGap; i <= currentPage + centrePageGap; i++) {
                     pageNumbersContainer.appendChild(createPageNumberButton(i));
                 }
                 pageNumbersContainer.appendChild(createEllipsis());
