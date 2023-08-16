@@ -1,225 +1,315 @@
+
+const partyInput = document.getElementById("party-input");
+const groupLevel = document.getElementById("group-level");
+const groupPlayers = document.getElementById("group-players");
+const monsterList = document.getElementById("monster-list");
+
+const monstersPerPage = 10;
+const maxVisiblePages = 9;
+let currentPage = 1;
+let totalMonsters = 0;
+let monstersData = [];
+
+
+
+
+
+
+/* Fetch Monster Data*/
+
+function fetchMonstersCSV() {
+	return fetch("monsters.csv")
+		.then(response => response.text())
+		.then(data => {
+			monstersData = data.split("\n").map(line => parseCSVLine(line));
+		})
+		.catch(error => {
+			console.error("Error fetching monster data:", error);
+			monstersData = [[0, "Giant Ant", "Normal", "Troop", "Beast", "Core Rulebook", 206],[1, "Decrepit Skeleton", "Normal", "Mook", "Undead", "Core Rulebook", 246],[1, "Dire Rat", "Normal", "Mook", "Beast", "Core Rulebook", 206],[1, "Giant Scorpion", "Normal", "Wrecker", "Beast", "Core Rulebook", 206],[1, "Goblin Grunt", "Normal", "Troop", "Humanoid", "Core Rulebook", 229],[1, "Goblin Scum", "Normal", "Mook", "Humanoid", "Core Rulebook", 229],[1, "Human Thug", "Normal", "Troop", "Humanoid", "Core Rulebook", 235],[1, "Kobold Archer", "Normal", "Mook", "Humanoid", "Core Rulebook", 237],[1, "Kobold Warrior", "Normal", "Troop", "Humanoid", "Core Rulebook", 237],[1, "Orc Warrior", "Normal", "Troop", "Humanoid", "Core Rulebook", 242],[1, "Skeletal Hound", "Normal", "Blocker", "Undead", "Core Rulebook", 246],[1, "Skeleton Archer", "Normal", "Archer", "Undead", "Core Rulebook", 246],[1, "Wolf", "Normal", "Troop", "Beast", "Core Rulebook", 207],[1, "Zombie Shuffler", "Normal", "Mook", "Undead", "Core Rulebook", 251],[2, "Ankheg", "Large", "Troop", "Beast", "Core Rulebook", 208],[2, "Bear", "Normal", "Troop", "Beast", "Core Rulebook", 207],[2, "Giant Web Spider", "Large", "Blocker", "Beast", "Core Rulebook", 207],[2, "Goblin Shaman", "Normal", "Caster", "Humanoid", "Core Rulebook", 229],[2, "Hobgoblin Warrior", "Normal", "Troop", "Humanoid", "Core Rulebook", 230],[2, "Human Zombie", "Normal", "Troop", "Undead", "Core Rulebook", 251],[2, "Hunting Spider", "Normal", "Wrecker", "Beast", "Core Rulebook", 206],[2, "Kobold Hero", "Normal", "Leader", "Humanoid", "Core Rulebook", 237],[2, "Lizardman Savage", "Normal", "Wrecker", "Humanoid", "Core Rulebook", 237],[2, "Medium White Dragon", "Normal", "Troop", "Dragon", "Core Rulebook", 218],[2, "Newly-Risen Ghoul", "Normal", "Mook", "Undead", "Core Rulebook", 225],[2, "Orc Berserker", "Normal", "Troop", "Humanoid", "Core Rulebook", 242],[2, "Orc Shaman", "Normal", "Leader", "Humanoid", "Core Rulebook", 242],[2, "Skeleton Warrior", "Normal", "Troop", "Undead", "Core Rulebook", 246],[2, "Trog", "Normal", "Spoiler", "Humanoid", "Core Rulebook", 247],[3, "Dire Wolf", "Large", "Troop", "Beast", "Core Rulebook", 207],[3, "Dretch", "Normal", "Mook", "Demon", "Core Rulebook", 210],[3, "Ghoul", "Normal", "Spoiler", "Humanoid", "Core Rulebook", 225],[3, "Gnoll Ranger", "Normal", "Archer", "Humanoid", "Core Rulebook", 229],[3, "Gnoll Savage", "Normal", "Troop", "Humanoid", "Core Rulebook", 228],[3, "Hellhound", "Normal", "Wrecker", "Beast", "Core Rulebook", 234],[3, "Hungry Star", "Normal", "Wrecker", "Aberration", "Core Rulebook", 235],[3, "Imp", "Normal", "Spoiler", "Demon", "Core Rulebook", 210],[3, "Medium Black Dragon", "Normal", "Wrecker", "Dragon", "Core Rulebook", 218],[3, "Ochre Jelly", "Large", "Wrecker", "Ooze", "Core Rulebook", 241],[3, "Otyugh", "Large", "Blocker", "Aberration", "Core Rulebook", 243],[3, "Trog Chanter", "Normal", "Leader", "Humanoid", "Core Rulebook", 247],[4, "Big Zombie", "Large", "Wrecker", "Undead", "Core Rulebook", 251],[4, "Blackamber Skeletal Legionnaire", "Normal", "Troop", "Undead", "Core Rulebook", 246],[4, "Derro Maniac", "Normal", "Troop", "Humanoid", "Core Rulebook", 216],[4, "Derro Sage", "Normal", "Caster", "Humanoid", "Core Rulebook", 216],[4, "Despoiler", "Normal", "Caster", "Demon", "Core Rulebook", 210],[4, "Dire Bear", "Large", "Troop", "Beast", "Core Rulebook", 207],[4, "Flesh Golem", "Large", "Blocker", "Construct", "Core Rulebook", 231],[4, "Gnoll War Leader", "Normal", "Leader", "Humanoid", "Core Rulebook", 229],[4, "Half-Orc Legionnaire", "Normal", "Troop", "Humanoid", "Core Rulebook", 233],[4, "Harpy", "Normal", "Spoiler", "Humanoid", "Core Rulebook", 234],[4, "Hobgoblin Captain", "Normal", "Leader", "Humanoid", "Core Rulebook", 230],[4, "Large White Dragon", "Large", "Troop", "Dragon", "Core Rulebook", 218],[4, "Medium Green Dragon", "Normal", "Spoiler", "Dragon", "Core Rulebook", 219],[4, "Minotaur", "Large", "Troop", "Humanoid", "Core Rulebook", 239],[4, "Owl Bear", "Large", "Wrecker", "Beast", "Core Rulebook", 243],[4, "Troll", "Large", "Troop", "Giant", "Core Rulebook", 248],[4, "Wight", "Normal", "Spoiler", "Undead", "Core Rulebook", 249],[5, "Bulette", "Large", "Wrecker", "Beast", "Core Rulebook", 208],[5, "Demon-Touched Human Ranger", "Normal", "Archer", "Humanoid", "Core Rulebook", 235],[5, "Ettin", "Large", "Troop", "Giant", "Core Rulebook", 224],[5, "Five-Headed Hydra", "Huge", "Wrecker", "Beast", "Core Rulebook", 236],[5, "Frenzy Demon", "Normal", "Wrecker", "Demon", "Core Rulebook", 211],[5, "Gargoyle", "Normal", "Troop", "Construct", "Core Rulebook", 224],[5, "Gelatinous Cube", "Huge", "Blocker", "Ooze", "Core Rulebook", 241],[5, "Half-Orc Tribal Champion", "Normal", "Wrecker", "Humanoid", "Core Rulebook", 233],[5, "Hobgoblin Warmage", "Normal", "Caster", "Humanoid", "Core Rulebook", 230],[5, "Huge White Dragon", "Huge", "Troop", "Dragon", "Core Rulebook", 219],[5, "Medium Blue Dragon", "Normal", "Caster", "Dragon", "Core Rulebook", 219],[5, "Wraith", "Normal", "Spoiler", "Undead", "Core Rulebook", 250],[5, "Wyvern", "Large", "Wrecker", "Beast", "Core Rulebook", 250],[6, "Clay Golem", "Large", "Spoiler", "Construct", "Core Rulebook", 231],[6, "Drider", "Large", "Caster", "Aberration", "Core Rulebook", 223],[6, "Hill Giant", "Large", "Troop", "Giant", "Core Rulebook", 225],[6, "Large Black Dragon", "Large", "Wrecker", "Dragon", "Core Rulebook", 220],[6, "Manticore", "Large", "Archer", "Beast", "Core Rulebook", 238],[6, "Medium Red Dragon", "Normal", "Wrecker", "Dragon", "Core Rulebook", 220],[6, "Medusa Outlaw", "Double-Strength", "Wrecker", "Humanoid", "Core Rulebook", 238],[6, "Vampire Spawn", "Normal", "Spoiler", "Undead", "Core Rulebook", 249],[6, "Vrock (Vulture Demon)", "Normal", "Spoiler", "Demon", "Core Rulebook", 211],[7, "Frost Giant", "Large", "Spoiler", "Giant", "Core Rulebook", 226],[7, "Hezrou (Toad Demon)", "Large", "Troop", "Demon", "Core Rulebook", 212],[7, "Large Green Dragon", "Large", "Spoiler", "Dragon", "Core Rulebook", 220],[7, "Ogre Mage", "Large", "Caster", "Giant", "Core Rulebook", 240],[7, "Orc Rager", "Normal", "Mook", "Humanoid", "Core Rulebook", 242],[7, "Phase Spider", "Large", "Wrecker", "Beast", "Core Rulebook", 244],[7, "Seven-Headed Hydra", "Huge", "Wrecker", "Beast", "Core Rulebook", 236],[8, "Glabrezou (Pincer Demon)", "Large", "Caster", "Demon", "Core Rulebook", 212],[8, "Half-Orc Commander", "Normal", "Leader", "Humanoid", "Core Rulebook", 233],[8, "Large Blue Dragon", "Large", "Caster", "Dragon", "Core Rulebook", 221],[8, "Stone Giant", "Large", "Troop", "Giant", "Core Rulebook", 226],[8, "Stone Golem", "Large", "Blocker", "Construct", "Core Rulebook", 232],[8, "Trog Underling", "Normal", "Mook", "Humanoid", "Core Rulebook", 247],[9, "Black Pudding", "Huge", "Wrecker", "Ooze", "Core Rulebook", 241],[9, "Chimera", "Large", "Wrecker", "Beast", "Core Rulebook", 209],[9, "Despoiler Mage", "Normal", "Caster", "Demon", "Core Rulebook", 213],[9, "Fire Giant Warlord", "Large", "Leader", "Giant", "Core Rulebook", 227],[9, "Giant Vrock (Vulture Demon)", "Large", "Spoiler", "Demon", "Core Rulebook", 214],[9, "Giant Zombie", "Large", "Mook", "Undead", "Core Rulebook", 251],[9, "Hooked Demon", "Normal", "Mook", "Demon", "Core Rulebook", 213],[9, "Huge Black Dragon", "Huge", "Wrecker", "Dragon", "Core Rulebook", 221],[10, "Great Fang Cadre (Orc)", "Normal", "Mook", "Humanoid", "Core Rulebook", 242],[10, "Iron Golem", "Large", "Wrecker", "Construct", "Core Rulebook", 232],[10, "Large Red Dragon", "Large", "Wrecker", "Dragon", "Core Rulebook", 222],[10, "Nalfeshnee (Boar Demon)", "Large", "Caster", "Demon", "Core Rulebook", 214],[10, "Spawn Of The Master (Vampire)", "Normal", "Mook", "Undead", "Core Rulebook", 249],[10, "Vampire", "Normal", "Spoiler", "Undead", "Core Rulebook", 248],[11, "Huge Green Dragon", "Huge", "Spoiler", "Dragon", "Core Rulebook", 222],[11, "Medusa Noble", "Double-Strength", "Caster", "Humanoid", "Core Rulebook", 239],[12, "Huge Blue Dragon", "Huge", "Caster", "Dragon", "Core Rulebook", 222],[12, "Marilith (Serpent Demon)", "Large", "Troop", "Demon", "Core Rulebook", 215],[13, "Balor (Flame Demon)", "Large", "Wrecker", "Demon", "Core Rulebook", 215],[13, "Huge Red Dragon", "Huge", "Wrecker", "Dragon", "Core Rulebook", 223]];
+		});
+}
+
+function parseCSVLine(line) {
+	const values = [];
+	let currentVal = "";
+	let withinQuotes = false;
+
+	for (const char of line) {
+		if (char === '"') {
+			withinQuotes = !withinQuotes;
+		} else if (char === ',' && !withinQuotes) {
+			values.push(currentVal.trim());
+			currentVal = "";
+		} else {
+			currentVal += char;
+		}
+	}
+
+	values.push(currentVal.trim());
+	return values;
+}
+
+function attachInputListeners(groupElement) {
+	const playerInput = groupElement.querySelector(".group-players");
+	const levelInput = groupElement.querySelector(".group-level");
+
+	playerInput.addEventListener("input", updateMonsterList);
+	levelInput.addEventListener("input", updateMonsterList);
+}
+
+
+
+
+
+/* Monster Fetching */
+
+function updateMonsterList() {     
+	const totalPartyLevel = calculateTotalPartyLevel();
+	fetchMonstersForPartyLevel(totalPartyLevel, currentPage);
+
+	const totalPages = Math.ceil(totalMonsters / monstersPerPage);
+	updatePageNumbers(totalPages);
+}
+
+function calculateTotalPartyLevel() {
+	let level = groupLevel.value * groupPlayers.value;
+	return level;
+}
+
+function fetchMonstersForPartyLevel(partyLevel, pageNumber) {
+	const startIndex = (pageNumber - 1) * monstersPerPage;
+	const endIndex = startIndex + monstersPerPage;
+
+	const monsterTbody = document.getElementById("monster-list");
+	monsterTbody.innerHTML = ""; // Clear existing table body
+
+	const filteredMonsters = monstersData.filter(values => {
+		return applyCurrentFilter(values);
+	});
+
+	for (let i = startIndex; i < endIndex && i < filteredMonsters.length; i++) {
+		let [level, name, size, role, type, source, page] = filteredMonsters[i];
+		if (size == "Normal") {
+			size = "";
+		}
+		const monsterRow = document.createElement("tr");
+		monsterRow.innerHTML = `
+		<td colspan="7">
+		<div class="monster-list-display">
+			<div class="monster-list-item item-level" style="grid-area: level"> <span class="level-text"> ${level} </span> </div>
+			<div class="monster-list-item item-name" style="grid-area: name"> ${name} </div>
+			<div class="monster-list-item item-size" style="grid-area: size"> ${size} </div>
+			<div class="monster-list-item item-role" style="grid-area: role"> ${role} </div>
+			<div class="monster-list-item item-type" style="grid-area: type"> ${type} </div>
+			<div class="monster-list-item item-source" style="grid-area: source"> ${source}, page ${page} </div>
+		</div>
+		</td>
+		`;
+		monsterTbody.appendChild(monsterRow);
+	}
+
+	totalMonsters = filteredMonsters.length;
+}
+
+function applyCurrentFilter(values) {
+	const [level, name, size, role, type, source, page] = values;
+	return true;
+}
+
+
+
+
+
+
+/* Updating Page numbers */
+
+function updatePageNumbers(totalPages) {
+	const pageNumbersContainer = document.getElementById("page-numbers");
+	pageNumbersContainer.innerHTML = "";
+
+	const pageNumbersToShow = Math.min(maxVisiblePages, totalPages);
+	const maxCentrePages = maxVisiblePages - 4;
+	const centrePageGap = Math.floor(maxCentrePages / 2);
+
+
+	if (totalPages <= maxVisiblePages) {
+		for (let i = 1; i <= totalPages; i++) {
+			pageNumbersContainer.appendChild(createPageNumberButton(i));
+		}
+	} else {
+		if (currentPage <= maxCentrePages)
+		{
+			// Page number close to start, no initial ellipsis
+			for (let i = 1; i <= maxVisiblePages - 2; i++) {
+				pageNumbersContainer.appendChild(createPageNumberButton(i));
+			}
+			pageNumbersContainer.appendChild(createEllipsis(maxCentrePages+3));
+			pageNumbersContainer.appendChild(createPageNumberButton(totalPages));
+		} else if (currentPage >= totalPages - maxCentrePages + 1) {
+			// Page number close to end, no final ellipsis
+			pageNumbersContainer.appendChild(createPageNumberButton(1));
+			pageNumbersContainer.appendChild(createEllipsis(totalPages - maxVisiblePages + 2));
+			for (let i = totalPages - maxVisiblePages + 3; i <= totalPages; i++) {
+				pageNumbersContainer.appendChild(createPageNumberButton(i));
+			}
+		} else {
+			//Somewhere in the middle, ellipsis both sides
+			pageNumbersContainer.appendChild(createPageNumberButton(1));
+			pageNumbersContainer.appendChild(createEllipsis(currentPage - centrePageGap - 1));
+			for (let i =  currentPage - centrePageGap; i <= currentPage + centrePageGap; i++) {
+				pageNumbersContainer.appendChild(createPageNumberButton(i));
+			}
+			pageNumbersContainer.appendChild(createEllipsis(currentPage + centrePageGap + 1));
+			pageNumbersContainer.appendChild(createPageNumberButton(totalPages));
+		}
+	}
+}
+
+function createPageNumberButton(pageNumber) {
+	const button = document.createElement("button");
+	button.textContent = pageNumber;
+	if (pageNumber == currentPage)
+	{
+		button.setAttribute("disabled", "disabled");
+	}
+	button.className = "page-number"
+	
+	button.addEventListener("click", () => {
+		currentPage = pageNumber;
+		updateMonsterList();
+	});
+	return button;
+}
+
+function createEllipsis(pageNumber) {
+	const ellipsis = document.createElement("button");
+	ellipsis.className = "ellipsis";
+	ellipsis.textContent = "...";
+
+	ellipsis.addEventListener("click", () => {
+		currentPage = pageNumber;
+		updateMonsterList();
+	});
+	return ellipsis;
+}
+
+
+
+
+/* Page resizing */
+function openTab(sender, tabName) {
+  var i;
+  var tabs = document.getElementsByClassName("tab");
+  for (i = 0; i < tabs.length; i++) {
+	tabs[i].classList.add("noDisplay");
+  }
+  document.getElementById(tabName).classList.remove("noDisplay");
+
+  var tabButtons = document.getElementsByClassName("tab-button");
+  for (i = 0; i < tabButtons.length; i++) {
+	tabButtons[i].classList.remove("selected");
+  }
+  sender.classList.add("selected");
+}
+
+
+
+
+
+/* Monster CR Calculating */
+
+const challengeTable = [
+  [0.5, 0.1, 1, 1.5],
+  [0.7, 0.15, 1.5, 2],
+  [1, 0.2, 2, 3],
+  [1.5, 0.3, 3, 4],
+  [2, 0.4, 4, 6],
+  [3, 0.6, 6, 8],
+  [4, 0.8, 8]
+];
+
+function calculateChallengeFactor(partyLevel, monsterLevel, monsterInfo) {
+
+  const levelDifference = monsterLevel - partyLevel;
+
+  let row;
+  if (levelDifference <= -2) {
+    return -1;
+  } else if (levelDifference >= 4) {
+    return -1;
+  } else {
+    row = levelDifference + 2;
+  }
+
+  const monsterInfoLower = monsterInfo.toLowerCase();
+  let column = 0;
+
+  if (monsterInfoLower == 'mook') {
+    column = 1;
+  } else if (monsterInfoLower == 'large' || monsterInfoLower == "double-strength") {
+    column = 2;
+  } else if (monsterInfoLower == 'huge' || monsterInfoLower == "triple-strength") {
+    column = 3;
+  }
+
+  return challengeTable[row][column];
+}
+
+function calculateMonsterLevels(challengeRating, partyLevel) {
+
+  let monsterLevels = {
+  mook: -1,
+  large: -1,
+  huge: -1,
+  normal: -1
+  };
+
+  for (let i = 0; i < challengeTable.length; i++) {
+    for (let j = 0; j < challengeTable[i].length; j++) {
+      const challengeFactor = challengeTable[i][j];
+      const monsterLevel = partyLevel + (i - 2);
+
+      if (challengeFactor == challengeRating) {
+        if (j==0){
+          monsterLevels.normal = monsterLevel;
+        } else if (j == 1) {
+          monsterLevels.mook = monsterLevel;
+        } else if (j == 2) {
+          monsterLevels.large = monsterLevel;
+        } else if (j == 3) {
+          monsterLevels.huge = monsterLevel;
+        }
+      }
+    }
+  }
+
+return monsterLevels;
+}
+
+
+
+
+
+/* On page load */
+
+window.onload=setTimeout(updateMonsterList, 100);
+
 document.addEventListener("DOMContentLoaded", () => {
-    const monstersPerPage = 10;
-    const maxVisiblePages = 9;
-    let currentPage = 1;
-    let totalMonsters = 0;
-    let monstersData = [];
+	const partyInput = document.getElementById("party-input");
+	const groupLevel = document.getElementById("group-level");
+	const groupPlayers = document.getElementById("group-players");
+	const monsterList = document.getElementById("monster-list");
 
-    const partyInput = document.getElementById("party-input");
-    const addGroupButton = document.getElementById("add-group");
-    const monsterList = document.getElementById("monster-list");
+	console.log("Loaded!")
+	fetchMonstersCSV();
 
-    addGroupButton.addEventListener("click", () => {
-        const newGroup = document.createElement("div");
-        newGroup.className = "player-group";
-        newGroup.innerHTML = `
-            <label class="group-players-label">Players:</label>
+	groupLevel.addEventListener("change", (event) => {
+		console.log("Changed group level");
+		updateMonsterList();
+	});
 
-            <label class="group-level-label" for="group-level">Level:</label>
-
-            <input type="number" class="group-players" min="1" value="1">
-
-            <div class="group-center"> </div>
-
-            <input type="number" class="group-level" min="1" value="1">
-
-            <button class="remove-group"></button>
-        `;
-        partyInput.appendChild(newGroup);
-        updateMonsterList();
-    });
-
-    partyInput.addEventListener("click", (event) => {
-        if (event.target.classList.contains("remove-group")) {
-            event.target.parentNode.remove();
-            updateMonsterList();
-        }
-    });
-
-    function fetchMonstersCSV() {
-        return fetch("monsters.csv")
-            .then(response => response.text())
-            .then(data => {
-                monstersData = data.split("\n").map(line => parseCSVLine(line));
-            })
-            .catch(error => {
-                console.error("Error fetching monster data:", error);
-            });
-    }
-
-    // Call fetchMonstersCSV once when the DOM is loaded
-    fetchMonstersCSV().then(() => {
-        partyInput.innerHTML = "";
-        // Call addGroup function to set up initial UI
-        addGroup();
-    });
-
-    function updatePageNumbers(totalPages) {
-        const pageNumbersContainer = document.getElementById("page-numbers");
-        pageNumbersContainer.innerHTML = "";
-
-        const pageNumbersToShow = Math.min(maxVisiblePages, totalPages);
-        const maxCentrePages = maxVisiblePages - 4;
-        const centrePageGap = Math.floor(maxCentrePages / 2);
-
-
-        if (totalPages <= maxVisiblePages) {
-            for (let i = 1; i <= totalPages; i++) {
-                pageNumbersContainer.appendChild(createPageNumberButton(i));
-            }
-        } else {
-            if (currentPage <= maxCentrePages)
-            {
-                // Page number close to start, no initial ellipsis
-                for (let i = 1; i <= maxVisiblePages - 2; i++) {
-                    pageNumbersContainer.appendChild(createPageNumberButton(i));
-                }
-                pageNumbersContainer.appendChild(createEllipsis());
-                pageNumbersContainer.appendChild(createPageNumberButton(totalPages));
-            } else if (currentPage >= totalPages - maxCentrePages) {
-                // Page number close to end, no final ellipsis
-                pageNumbersContainer.appendChild(createPageNumberButton(1));
-                pageNumbersContainer.appendChild(createEllipsis());
-                for (let i = totalPages - maxVisiblePages + 3; i <= totalPages; i++) {
-                    pageNumbersContainer.appendChild(createPageNumberButton(i));
-                }
-            } else {
-                //Somewhere in the middle, ellipsis both sides
-                pageNumbersContainer.appendChild(createPageNumberButton(1));
-                pageNumbersContainer.appendChild(createEllipsis());
-                for (let i =  currentPage - centrePageGap; i <= currentPage + centrePageGap; i++) {
-                    pageNumbersContainer.appendChild(createPageNumberButton(i));
-                }
-                pageNumbersContainer.appendChild(createEllipsis());
-                pageNumbersContainer.appendChild(createPageNumberButton(totalPages));
-            }
-        }
-    }
-
-    function createPageNumberButton(pageNumber) {
-        const button = document.createElement("button");
-        button.textContent = pageNumber;
-        if (pageNumber == currentPage)
-        {
-            button.setAttribute("disabled", "disabled");
-        }
-        button.className = "page-number"
-        
-        button.addEventListener("click", () => {
-            currentPage = pageNumber;
-            updateMonsterList();
-        });
-        return button;
-    }
-
-    function createEllipsis() {
-        const ellipsis = document.createElement("button");
-        ellipsis.className = "ellipsis";
-        ellipsis.setAttribute("disabled", "disabled");
-        ellipsis.textContent = "...";
-        return ellipsis;
-    }
-
-    function calculateTotalPartyLevel() {
-        let totalLevel = 0;
-        const groupElements = document.querySelectorAll(".player-group");
-        
-        groupElements.forEach(group => {
-            const groupLevel = parseInt(group.querySelector(".group-level").value);
-            const groupPlayers = parseInt(group.querySelector(".group-players").value);
-            totalLevel += groupLevel * groupPlayers;
-        });
-        console.log(totalLevel);
-        return totalLevel;
-    }
-
-    function fetchMonstersForPartyLevel(partyLevel, pageNumber) {
-        const startIndex = (pageNumber - 1) * monstersPerPage;
-        const endIndex = startIndex + monstersPerPage;
-
-        const monsterTbody = document.getElementById("monster-list");
-        monsterTbody.innerHTML = ""; // Clear existing table body
-
-        const filteredMonsters = monstersData.filter(values => {
-            const [level] = values;
-            return !isNaN(level) && parseInt(level) <= partyLevel + 1 && parseInt(level) >= partyLevel - 1;
-        });
-
-        for (let i = startIndex; i < endIndex && i < filteredMonsters.length; i++) {
-            const [level, name, size, role, type, source, page] = filteredMonsters[i];
-            const monsterRow = document.createElement("tr");
-            monsterRow.innerHTML = `
-                <td>${name}</td>
-                <td>${level}</td>
-                <td>${size}</td>
-                <td>${role}</td>
-                <td>${type}</td>
-                <td>${source}</td>
-                <td>${page}</td>
-            `;
-            monsterTbody.appendChild(monsterRow);
-        }
-
-        totalMonsters = filteredMonsters.length;
-    }
-
-    function parseCSVLine(line) {
-        const values = [];
-        let currentVal = "";
-        let withinQuotes = false;
-
-        for (const char of line) {
-            if (char === '"') {
-                withinQuotes = !withinQuotes;
-            } else if (char === ',' && !withinQuotes) {
-                values.push(currentVal.trim());
-                currentVal = "";
-            } else {
-                currentVal += char;
-            }
-        }
-
-        values.push(currentVal.trim());
-        return values;
-    }
-
-    function attachInputListeners(groupElement) {
-        const playerInput = groupElement.querySelector(".group-players");
-        const levelInput = groupElement.querySelector(".group-level");
-
-        playerInput.addEventListener("input", updateMonsterList);
-        levelInput.addEventListener("input", updateMonsterList);
-    }
-
-    function addGroup() {
-        const newGroup = document.createElement("div");
-        newGroup.className = "player-group";
-        newGroup.innerHTML = `
-            <label for="group-players">Players:</label>
-            <input type="number" class="group-players" min="1" value="1">
-
-            <label for="group-level">Level:</label>
-            <input type="number" class="group-level" min="1" value="1">
-
-            <button class="remove-group">X</button>
-        `;
-
-        const removeButton = newGroup.querySelector(".remove-group");
-        removeButton.addEventListener("click", () => {
-            newGroup.remove();
-            updateMonsterList();
-        });
-
-        partyInput.appendChild(newGroup);
-        attachInputListeners(newGroup); // Attach listeners to the new group
-        updateMonsterList();
-    }
-
-    function updateMonsterList() {        
-        const totalPartyLevel = calculateTotalPartyLevel();
-        fetchMonstersForPartyLevel(totalPartyLevel, currentPage);
-
-        const totalPages = Math.ceil(totalMonsters / monstersPerPage);
-        updatePageNumbers(totalPages);
-    }
+	groupPlayers.addEventListener("change", (event) => {
+		console.log("Changed group size");
+		updateMonsterList();
+	});
 });

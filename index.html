@@ -3,45 +3,59 @@
 <head>
 	<title>Koru Fight Club</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
-		<script src="https://kit.fontawesome.com/7f9c029c83.js" crossorigin="anonymous"></script>
 </head>
 <body>
 	<h1>Koru Fight Club</h1>
 
-	<div class="container">
-	
-	<div class="player-div">
-	<div id="party-input">
-		<p> Loading... </p>
-	</div>
-	
-	<button id="add-group">Add Group</button>
+	<div class="tab-button-container">
+		<button id="main-tab-button" class="tab-button selected" onclick="openTab(this, 'players')"> Players </button>
+		<button class="tab-button" onclick="openTab(this, 'monsters')"> Monsters </button>
 	</div>
 
-	<div class="monster-div">
-		<h2>Monsters:</h2>
-		<table id="monster-table">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Level</th>
-					<th>Size</th>
-					<th>Role</th>
-					<th>Type</th>
-					<th>Source</th>
-					<th>Page</th>
-				</tr>
-			</thead>
-			<tbody id="monster-list">
-				<!-- Monster data will be displayed here -->
-				
-			</tbody>
-		</table>
+	<div class="container"> 
+		<div class="player-div tab" id="players">
+			<div class="party-input" id="party-input">
+				<div class="player-group">
+					<label class="group-players-label">Players:</label>
+					<label class="group-level-label" for="group-level">Level:</label>
 
-		<div id="page-numbers">
-			<button> Blank </button>
+					<input type="number" class="group-players" id="group-players" min="1" value="1">
+					<div class="multiply"> </div>
+					<input type="number" class="group-level" id="group-level" min="1" value="1">
+				</div>
+			</div>  
 		</div>
-	</div>
+
+		<div class="monster-div tab noDisplay" id="monsters">
+			<div class="monster-table-container">
+				<table class="monster-table" id="monster-table">
+					<thead>
+						<tr>
+							<th class="head-name"> Name </td>
+							<th class="head-level"> Level </td>
+							<th class="head-size"> Size </td>
+							<th class="head-role"> Role </td>
+							<th class="head-type"> Type </td>
+							<th class="head-source"> Source </td>
+							<th class="head-page"> Page </td>
+						</tr>
+					</thead>
+					<tbody class="monster-list" id="monster-list">
+						
+
+
+						<!-- Monster data will be displayed here -->
+
+
+
+					</tbody>
+				</table>
+			</div>
+
+			<div class="page-numbers" id="page-numbers">
+				<button> Blank </button>
+			</div>
+		</div>
 	</div>
 
 	<script src="script.js"></script>
