@@ -7,14 +7,14 @@
 <body>
 	<h1>Koru Fight Club</h1>
 
-	<div class="tab-button-container">
-		<button id="main-tab-button" class="tab-button selected" onclick="openTab(this, 'players')"> Players </button>
+	<div class="tab-button-container" id="tab-button-container">
+		<button id="main-tab-button" class="tab-button selected" onclick="openTab(this, 'players')"> Encounter </button>
 		<button class="tab-button" onclick="openTab(this, 'monsters')"> Monsters </button>
 	</div>
 
 	<div class="container"> 
 		<div class="player-div tab" id="players">
-			<div class="party-input" id="party-input">
+			<div class="party-input shadowed" id="party-input">
 				<div class="player-group">
 					<label class="group-players-label">Players:</label>
 					<label class="group-level-label" for="group-level">Level:</label>
@@ -24,27 +24,72 @@
 					<input type="number" class="group-level" id="group-level" min="1" value="1">
 				</div>
 			</div>  
+
+
+			<div class="battle-output shadowed">
+				<div class="generator-options">
+				  <select class="select-strength" id="select-strength">
+		        <option value="single">Half Strength</option>
+		        <option value="single" selected>Single Strength</option>
+		        <option value="1.5x">1.5x Strength</option>
+		        <option value="double">Double Strength</option>
+		        <option value="triple">Triple Strength</option>
+		        <option value="quadruple">Quadruple Strength</option>
+		    	</select>
+
+		    	<select class="select-format" id="select-format">
+		        <option value="random">Random</option>
+		        <option value="leader">Leader</option>
+		        <option value="leader-guards">Leader with Guards</option>
+		        <option value="symmetrical-duo">Symmetrical Duo</option>
+		        <option value="asymmetrical-duo">Asymmetrical Duo</option>
+		        <option value="symmetrical-trio">Symmetrical Trio</option>
+		        <option value="asymmetrical-trio">Asymmetrical Trio</option>
+		        <option value="horde">Horde</option>
+		    	</select>
+
+		    	<button class="generate">	&#8635; </button>
+		    </div>
+		    	<!-- Generated monster encounters will be displayed here as <div>s -->
+		    	<div class="display-result" id="display-result">
+
+
+
+		    	</div>
+
+			</div>
 		</div>
 
+
+
+
+
+
+
+
+
 		<div class="monster-div tab noDisplay" id="monsters">
-			<div class="monster-table-container">
+
+			<div class="search-container">
+		    <input type="text" class="search-input" id="search-input" placeholder="Search...">
+			</div>
+
+			<div class="monster-table-container shadowed">
 				<table class="monster-table" id="monster-table">
 					<thead>
 						<tr>
-							<th class="head-name"> Name </td>
-							<th class="head-level"> Level </td>
-							<th class="head-size"> Size </td>
-							<th class="head-role"> Role </td>
-							<th class="head-type"> Type </td>
-							<th class="head-source"> Source </td>
-							<th class="head-page"> Page </td>
+							<th class="head-name"  style="grid-area: 'name';" >   <p> Name    <span class="sort-arrow up selected"> </span> </p> </td>
+							<th class="head-level" style="grid-area: 'level';">  <p> Level   <span class="sort-arrow up"> </span> </p> </td>
+							<th class="head-size"  style="grid-area: 'size';" >   <p> Size    <span class="sort-arrow up"> </span> </p> </td>
+							<th class="head-role"  style="grid-area: 'role';" >   <p> Role    <span class="sort-arrow up"> </span> </p> </td>
+							<th class="head-type"  style="grid-area: 'type';" >   <p> Type    <span class="sort-arrow up"> </span> </p> </td>
 						</tr>
 					</thead>
 					<tbody class="monster-list" id="monster-list">
 						
 
 
-						<!-- Monster data will be displayed here -->
+						<!-- Monster data will be displayed here as <tr>s -->
 
 
 
