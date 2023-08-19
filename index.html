@@ -19,7 +19,7 @@
 					<label class="group-players-label">Players:</label>
 					<label class="group-level-label" for="group-level">Level:</label>
 
-					<input type="number" class="group-players" id="group-players" min="1" value="1">
+					<input type="number" class="group-players" id="group-players" min="1" value="4">
 					<div class="multiply"> </div>
 					<input type="number" class="group-level" id="group-level" min="1" value="1">
 				</div>
@@ -78,11 +78,11 @@
 				<table class="monster-table" id="monster-table">
 					<thead>
 						<tr>
-							<th class="head-name"  style="grid-area: 'name';" >   <p> Name    <span class="sort-arrow up selected"> </span> </p> </td>
-							<th class="head-level" style="grid-area: 'level';">  <p> Level   <span class="sort-arrow up"> </span> </p> </td>
-							<th class="head-size"  style="grid-area: 'size';" >   <p> Size    <span class="sort-arrow up"> </span> </p> </td>
-							<th class="head-role"  style="grid-area: 'role';" >   <p> Role    <span class="sort-arrow up"> </span> </p> </td>
-							<th class="head-type"  style="grid-area: 'type';" >   <p> Type    <span class="sort-arrow up"> </span> </p> </td>
+							<th class="monster-table-head head-name up selected"  style="grid-area: 'name';"  onclick="newOrder(this, 'name')">   <p> Name    <span class="sort-arrow"> </span> </p> </td>
+							<th class="monster-table-head head-level" style="grid-area: 'level';" onclick="newOrder(this, 'level')">  <p> Level   <span class="sort-arrow up"> </span> </p> </td>
+							<th class="monster-table-head head-size"  style="grid-area: 'size';"  onclick="newOrder(this, 'size')">   <p> Size    <span class="sort-arrow up"> </span> </p> </td>
+							<th class="monster-table-head head-role"  style="grid-area: 'role';"  onclick="newOrder(this, 'role')">   <p> Role    <span class="sort-arrow up"> </span> </p> </td>
+							<th class="monster-table-head head-type"  style="grid-area: 'type';"  onclick="newOrder(this, 'type')">   <p> Type    <span class="sort-arrow up"> </span> </p> </td>
 						</tr>
 					</thead>
 					<tbody class="monster-list" id="monster-list">

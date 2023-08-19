@@ -27,12 +27,12 @@ function fetchMonstersCSV() {
 		.then(response => response.text())
 		.then(data => {
 			monstersData = data.split("\n").map(line => parseCSVLine(line));
-			monstersData = sortAndFilterMonsters(monstersData);
+			sortAndFilterMonsters();
 		})
 		.catch(error => {
 			console.error("Error fetching monster data:", error);
 			monstersData = [[0, "Giant Ant", "Normal", "Troop", "Beast", "Core Rulebook", 206],[1, "Decrepit Skeleton", "Normal", "Mook", "Undead", "Core Rulebook", 246],[1, "Dire Rat", "Normal", "Mook", "Beast", "Core Rulebook", 206],[1, "Giant Scorpion", "Normal", "Wrecker", "Beast", "Core Rulebook", 206],[1, "Goblin Grunt", "Normal", "Troop", "Humanoid", "Core Rulebook", 229],[1, "Goblin Scum", "Normal", "Mook", "Humanoid", "Core Rulebook", 229],[1, "Human Thug", "Normal", "Troop", "Humanoid", "Core Rulebook", 235],[1, "Kobold Archer", "Normal", "Mook", "Humanoid", "Core Rulebook", 237],[1, "Kobold Warrior", "Normal", "Troop", "Humanoid", "Core Rulebook", 237],[1, "Orc Warrior", "Normal", "Troop", "Humanoid", "Core Rulebook", 242],[1, "Skeletal Hound", "Normal", "Blocker", "Undead", "Core Rulebook", 246],[1, "Skeleton Archer", "Normal", "Archer", "Undead", "Core Rulebook", 246],[1, "Wolf", "Normal", "Troop", "Beast", "Core Rulebook", 207],[1, "Zombie Shuffler", "Normal", "Mook", "Undead", "Core Rulebook", 251],[2, "Ankheg", "Large", "Troop", "Beast", "Core Rulebook", 208],[2, "Bear", "Normal", "Troop", "Beast", "Core Rulebook", 207],[2, "Giant Web Spider", "Large", "Blocker", "Beast", "Core Rulebook", 207],[2, "Goblin Shaman", "Normal", "Caster", "Humanoid", "Core Rulebook", 229],[2, "Hobgoblin Warrior", "Normal", "Troop", "Humanoid", "Core Rulebook", 230],[2, "Human Zombie", "Normal", "Troop", "Undead", "Core Rulebook", 251],[2, "Hunting Spider", "Normal", "Wrecker", "Beast", "Core Rulebook", 206],[2, "Kobold Hero", "Normal", "Leader", "Humanoid", "Core Rulebook", 237],[2, "Lizardman Savage", "Normal", "Wrecker", "Humanoid", "Core Rulebook", 237],[2, "Medium White Dragon", "Normal", "Troop", "Dragon", "Core Rulebook", 218],[2, "Newly-Risen Ghoul", "Normal", "Mook", "Undead", "Core Rulebook", 225],[2, "Orc Berserker", "Normal", "Troop", "Humanoid", "Core Rulebook", 242],[2, "Orc Shaman", "Normal", "Leader", "Humanoid", "Core Rulebook", 242],[2, "Skeleton Warrior", "Normal", "Troop", "Undead", "Core Rulebook", 246],[2, "Trog", "Normal", "Spoiler", "Humanoid", "Core Rulebook", 247],[3, "Dire Wolf", "Large", "Troop", "Beast", "Core Rulebook", 207],[3, "Dretch", "Normal", "Mook", "Demon", "Core Rulebook", 210],[3, "Ghoul", "Normal", "Spoiler", "Humanoid", "Core Rulebook", 225],[3, "Gnoll Ranger", "Normal", "Archer", "Humanoid", "Core Rulebook", 229],[3, "Gnoll Savage", "Normal", "Troop", "Humanoid", "Core Rulebook", 228],[3, "Hellhound", "Normal", "Wrecker", "Beast", "Core Rulebook", 234],[3, "Hungry Star", "Normal", "Wrecker", "Aberration", "Core Rulebook", 235],[3, "Imp", "Normal", "Spoiler", "Demon", "Core Rulebook", 210],[3, "Medium Black Dragon", "Normal", "Wrecker", "Dragon", "Core Rulebook", 218],[3, "Ochre Jelly", "Large", "Wrecker", "Ooze", "Core Rulebook", 241],[3, "Otyugh", "Large", "Blocker", "Aberration", "Core Rulebook", 243],[3, "Trog Chanter", "Normal", "Leader", "Humanoid", "Core Rulebook", 247],[4, "Big Zombie", "Large", "Wrecker", "Undead", "Core Rulebook", 251],[4, "Blackamber Skeletal Legionnaire", "Normal", "Troop", "Undead", "Core Rulebook", 246],[4, "Derro Maniac", "Normal", "Troop", "Humanoid", "Core Rulebook", 216],[4, "Derro Sage", "Normal", "Caster", "Humanoid", "Core Rulebook", 216],[4, "Despoiler", "Normal", "Caster", "Demon", "Core Rulebook", 210],[4, "Dire Bear", "Large", "Troop", "Beast", "Core Rulebook", 207],[4, "Flesh Golem", "Large", "Blocker", "Construct", "Core Rulebook", 231],[4, "Gnoll War Leader", "Normal", "Leader", "Humanoid", "Core Rulebook", 229],[4, "Half-Orc Legionnaire", "Normal", "Troop", "Humanoid", "Core Rulebook", 233],[4, "Harpy", "Normal", "Spoiler", "Humanoid", "Core Rulebook", 234],[4, "Hobgoblin Captain", "Normal", "Leader", "Humanoid", "Core Rulebook", 230],[4, "Large White Dragon", "Large", "Troop", "Dragon", "Core Rulebook", 218],[4, "Medium Green Dragon", "Normal", "Spoiler", "Dragon", "Core Rulebook", 219],[4, "Minotaur", "Large", "Troop", "Humanoid", "Core Rulebook", 239],[4, "Owl Bear", "Large", "Wrecker", "Beast", "Core Rulebook", 243],[4, "Troll", "Large", "Troop", "Giant", "Core Rulebook", 248],[4, "Wight", "Normal", "Spoiler", "Undead", "Core Rulebook", 249],[5, "Bulette", "Large", "Wrecker", "Beast", "Core Rulebook", 208],[5, "Demon-Touched Human Ranger", "Normal", "Archer", "Humanoid", "Core Rulebook", 235],[5, "Ettin", "Large", "Troop", "Giant", "Core Rulebook", 224],[5, "Five-Headed Hydra", "Huge", "Wrecker", "Beast", "Core Rulebook", 236],[5, "Frenzy Demon", "Normal", "Wrecker", "Demon", "Core Rulebook", 211],[5, "Gargoyle", "Normal", "Troop", "Construct", "Core Rulebook", 224],[5, "Gelatinous Cube", "Huge", "Blocker", "Ooze", "Core Rulebook", 241],[5, "Half-Orc Tribal Champion", "Normal", "Wrecker", "Humanoid", "Core Rulebook", 233],[5, "Hobgoblin Warmage", "Normal", "Caster", "Humanoid", "Core Rulebook", 230],[5, "Huge White Dragon", "Huge", "Troop", "Dragon", "Core Rulebook", 219],[5, "Medium Blue Dragon", "Normal", "Caster", "Dragon", "Core Rulebook", 219],[5, "Wraith", "Normal", "Spoiler", "Undead", "Core Rulebook", 250],[5, "Wyvern", "Large", "Wrecker", "Beast", "Core Rulebook", 250],[6, "Clay Golem", "Large", "Spoiler", "Construct", "Core Rulebook", 231],[6, "Drider", "Large", "Caster", "Aberration", "Core Rulebook", 223],[6, "Hill Giant", "Large", "Troop", "Giant", "Core Rulebook", 225],[6, "Large Black Dragon", "Large", "Wrecker", "Dragon", "Core Rulebook", 220],[6, "Manticore", "Large", "Archer", "Beast", "Core Rulebook", 238],[6, "Medium Red Dragon", "Normal", "Wrecker", "Dragon", "Core Rulebook", 220],[6, "Medusa Outlaw", "Double-Strength", "Wrecker", "Humanoid", "Core Rulebook", 238],[6, "Vampire Spawn", "Normal", "Spoiler", "Undead", "Core Rulebook", 249],[6, "Vrock (Vulture Demon)", "Normal", "Spoiler", "Demon", "Core Rulebook", 211],[7, "Frost Giant", "Large", "Spoiler", "Giant", "Core Rulebook", 226],[7, "Hezrou (Toad Demon)", "Large", "Troop", "Demon", "Core Rulebook", 212],[7, "Large Green Dragon", "Large", "Spoiler", "Dragon", "Core Rulebook", 220],[7, "Ogre Mage", "Large", "Caster", "Giant", "Core Rulebook", 240],[7, "Orc Rager", "Normal", "Mook", "Humanoid", "Core Rulebook", 242],[7, "Phase Spider", "Large", "Wrecker", "Beast", "Core Rulebook", 244],[7, "Seven-Headed Hydra", "Huge", "Wrecker", "Beast", "Core Rulebook", 236],[8, "Glabrezou (Pincer Demon)", "Large", "Caster", "Demon", "Core Rulebook", 212],[8, "Half-Orc Commander", "Normal", "Leader", "Humanoid", "Core Rulebook", 233],[8, "Large Blue Dragon", "Large", "Caster", "Dragon", "Core Rulebook", 221],[8, "Stone Giant", "Large", "Troop", "Giant", "Core Rulebook", 226],[8, "Stone Golem", "Large", "Blocker", "Construct", "Core Rulebook", 232],[8, "Trog Underling", "Normal", "Mook", "Humanoid", "Core Rulebook", 247],[9, "Black Pudding", "Huge", "Wrecker", "Ooze", "Core Rulebook", 241],[9, "Chimera", "Large", "Wrecker", "Beast", "Core Rulebook", 209],[9, "Despoiler Mage", "Normal", "Caster", "Demon", "Core Rulebook", 213],[9, "Fire Giant Warlord", "Large", "Leader", "Giant", "Core Rulebook", 227],[9, "Giant Vrock (Vulture Demon)", "Large", "Spoiler", "Demon", "Core Rulebook", 214],[9, "Giant Zombie", "Large", "Mook", "Undead", "Core Rulebook", 251],[9, "Hooked Demon", "Normal", "Mook", "Demon", "Core Rulebook", 213],[9, "Huge Black Dragon", "Huge", "Wrecker", "Dragon", "Core Rulebook", 221],[10, "Great Fang Cadre (Orc)", "Normal", "Mook", "Humanoid", "Core Rulebook", 242],[10, "Iron Golem", "Large", "Wrecker", "Construct", "Core Rulebook", 232],[10, "Large Red Dragon", "Large", "Wrecker", "Dragon", "Core Rulebook", 222],[10, "Nalfeshnee (Boar Demon)", "Large", "Caster", "Demon", "Core Rulebook", 214],[10, "Spawn Of The Master (Vampire)", "Normal", "Mook", "Undead", "Core Rulebook", 249],[10, "Vampire", "Normal", "Spoiler", "Undead", "Core Rulebook", 248],[11, "Huge Green Dragon", "Huge", "Spoiler", "Dragon", "Core Rulebook", 222],[11, "Medusa Noble", "Double-Strength", "Caster", "Humanoid", "Core Rulebook", 239],[12, "Huge Blue Dragon", "Huge", "Caster", "Dragon", "Core Rulebook", 222],[12, "Marilith (Serpent Demon)", "Large", "Troop", "Demon", "Core Rulebook", 215],[13, "Balor (Flame Demon)", "Large", "Wrecker", "Demon", "Core Rulebook", 215],[13, "Huge Red Dragon", "Huge", "Wrecker", "Dragon", "Core Rulebook", 223]];
-			monstersData = sortAndFilterMonsters(monstersData);
+			sortAndFilterMonsters();
 		});
 }
 
@@ -100,7 +100,7 @@ function fetchMonstersForPartyLevel(partyLevel, pageNumber) {
 		monsterRow.innerHTML = `
 		<td class="hoverable" colspan="7">
 		<div class="monster-list-display" onclick="addMonsterFromTable('${i}')">
-			<div class="monster-list-item item-level" style="grid-area: level"> <span class="level-text"> ${level} </span> </div>
+			<div class="monster-list-item item-level" style="grid-area: level"> ${level} </span> </div>
 			<div class="monster-list-item item-name" style="grid-area: name" title="${name}"> <p> ${name} </p> </div>
 			<div class="monster-list-item item-size" style="grid-area: size"> ${size} </div>
 			<div class="monster-list-item item-role" style="grid-area: role"> ${role} </div>
@@ -124,14 +124,12 @@ function fetchMonstersForPartyLevel(partyLevel, pageNumber) {
 	totalMonsters = searchedFilteredMonsters.length;
 }
 
-function sortAndFilterMonsters(mainList) {
-	console.log(mainList);
-	sortedList = sortMainList(mainList, sortBy, sortOrder);
-	console.log(sortedList);
+function sortAndFilterMonsters() {
+	console.log(monstersData);
+	sortedList = sortMainList(monstersData, sortBy, sortOrder);
 	filteredList = sortedList.filter(values => {
 		return applyCurrentFilter(values);
 	});
-	console.log(filteredList);
 	filteredMonsters = filteredList;
 }
 
@@ -148,14 +146,31 @@ function sortMainList(mainList, sortBy, sortOrder) {
         const valueA = a[categories.indexOf(sortBy)];
         const valueB = b[categories.indexOf(sortBy)];
 
+
         if (sortOrder === "ascending") {
-            return valueA.localeCompare(valueB);
+            return comparison(valueA, valueB);
         } else {
-            return valueB.localeCompare(valueA);
+            return comparison(valueB, valueA);
         }
     });
 
     return mainList;
+}
+
+function comparison(a, b){
+	if (typeof a == 'number')
+	{
+		return a - b; 
+	}
+	else if(typeof a == "string")
+	{
+		return a.localeCompare(b);
+	}
+	else
+	{
+		console.log(a);
+		return 0;
+	}
 }
 
 function searchFilter(mainList, searchText) {    
@@ -167,6 +182,38 @@ function searchFilter(mainList, searchText) {
         });
     });    
     return filteredList;
+}
+
+function newOrder(element, newSortBy) {
+	if (sortBy = newSortBy)
+	{
+		if (element.classList.contains("up")){
+			element.classList.remove("up");
+			element.classList.add("down");
+			sortOrder = "descending";
+		}
+		else
+		{
+			element.classList.remove("down");
+			element.classList.add("up");
+			sortOrder = "ascending";
+		}
+	}
+	else
+	{	
+		sortBy = newSortBy;
+		sortOrder = "ascending";
+		element.classList.remove("down");
+		element.classList.add("up");
+	}
+
+	document.querySelectorAll('.monster-table-head.selected').forEach(el => el.classList.remove("selected"));
+	element.classList.add("selected");	
+	document.querySelectorAll('.monster-table-head:not(.selected)').forEach(el => {el.classList.remove("down"); el.classList.remove("up");});
+
+	sortAndFilterMonsters();
+	updateMonsterList();
+
 }
 
 
@@ -273,12 +320,15 @@ function openTab(sender, tabName) {
 	tabButtons[i].classList.remove("selected");
   }
   sender.classList.add("selected");
+
+  adjustMonsterTable();
 }
 
 function adjustMonsterTable() {
 	let monsterTable = document.getElementById("monster-table")
 	console.log(monsterTable.offsetWidth)
 	console.log(monsterTable.offsetHeight)
+	previous = monsterTable.classList.contains("wide-table")
 	if (monsterTable.offsetWidth - monsterTable.offsetHeight < 0) {
 		monsterTable.classList.remove("wide-table");
 	}
@@ -399,16 +449,28 @@ function addMonsterFromTable(idNumber) {
 
 	const monsterEntry = document.createElement("div");
 	monsterEntry.innerHTML = `
-	<div class="monster-list-display">
-		<div class="monster-list-item item-level" style="grid-area: level"> <span class="level-text"> ${level} </span> </div>
-		<div class="monster-list-item item-name" style="grid-area: name" title="${name}"> <p> ${name} </p> </div>
-		<div class="monster-list-item item-size" style="grid-area: size"> ${size} </div>
-		<div class="monster-list-item item-role" style="grid-area: role"> ${role} </div>
-		<div class="monster-list-item item-source" style="grid-area: source"> ${source}, page ${page} </div>
-		<div class="monster-list-item item-type" style="grid-area: type"> ${type} </div>
+	<div class="monster-generator-display">
+		<div class="monster-gen-item item-name" style="grid-area: name" title="${name}"> <p> ${name} </p> </div>
+		<div class="monster-gen-item item-info" style="grid-area: info"> <p>${size} ${suffixNum(level)} Level ${role} [${type}]</p>  </div>
+		<div class="monster-gen-item item-source" style="grid-area: source"> <p> ${source}, page ${page} </p> </div>
 	</div>
 	`;
 	document.getElementById("display-result").appendChild(monsterEntry);
+}
+
+function suffixNum(i) {
+    var j = i % 10,
+        k = i % 100;
+    if (j == 1 && k != 11) {
+        return i + "st";
+    }
+    if (j == 2 && k != 12) {
+        return i + "nd";
+    }
+    if (j == 3 && k != 13) {
+        return i + "rd";
+    }
+    return i + "th";
 }
 
 
@@ -416,8 +478,8 @@ function addMonsterFromTable(idNumber) {
 
 /* On page load */
 
-window.onload=setTimeout(updateMonsterList, 100);
-adjustMonsterTable();
+window.onload=setTimeout(updateMonsterList, 20);
+window.onload=setTimeout(adjustMonsterTable, 20);
 window.onresize=adjustMonsterTable;
 adjustMonsterTable();
 
@@ -430,6 +492,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	console.log("Loaded!")
 	fetchMonstersCSV();
+	adjustMonsterTable();
 
 	groupLevel.addEventListener("change", (event) => {
 		console.log("Changed group level");

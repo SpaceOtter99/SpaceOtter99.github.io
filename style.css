@@ -65,7 +65,7 @@ h2 {
 
 p {
     all: inherit;
-    line-height: 1;
+    line-height: normal;
 }
 
 .container {
@@ -309,6 +309,38 @@ p {
     border-radius: var(--border-radius);
 }
 
+.monster-generator-display {
+        display: grid;
+        width: 100%;
+        height: calc(var(--size-text) + (2 * var(--size-text-small)) + 0.3em);
+        grid-template-areas: 
+        "name qty del"
+        "info qty  del"
+        "source qty del";
+        grid-template-columns: 3fr 4em 1em;
+        grid-template-rows: var(--size-text) var(--size-text-small) var(--size-text-small);
+        cursor: default;
+        overflow: visible;
+        grid-gap: 0.1em;
+    }
+
+.monster-generator-display .item-name {
+    font-size: var(--size-text);
+    overflow: visible;
+}
+
+.monster-generator-display .item-info, .monster-generator-display .item-source {
+    font-size: var(--size-text-small);
+    overflow: visible;
+}
+
+.monster-gen-item p{
+    overflow: visible;
+}
+
+
+
+
 
 
 
@@ -317,7 +349,7 @@ p {
 
 
 .monster-table-container {
-    height: 60vh;
+    height: 32em;
     background-color: var(--main-bg);
     border-radius: var(--border-radius);
     display: flex;
@@ -334,6 +366,7 @@ p {
     overflow: hidden;
     transition: color ease-out .15s, background-color ease-in-out .15s;
     height: calc(var(--size-text) + var(--size-text-small));
+    vertical-align: middle;
 }
 
 .monster-table td {
@@ -349,11 +382,20 @@ p {
 .monster-table th p{
     background: none;
     user-select: none;
+    padding-left: 1em;
+}
+
+.monster-table th p:last-child {
+    padding-left: 0.5em;
 }
 
 .monster-table th:hover{
     color: var(--red);
     cursor: pointer;
+}
+
+.monster-table th:first-child p{
+    padding: 0.5em 0 0.5em 0.5em;
 }
 /*
 .monster-table th:not(:first-child):not(:last-child) p::before {
@@ -384,7 +426,7 @@ p {
     transition: background-color ease-in-out .15s;
 }
 
-.sort-arrow.up::after{
+.sort-arrow::after{
     position: absolute;
     display: block;
 
@@ -397,20 +439,25 @@ p {
     top: 50%;
     left: 50%;
 
-    content: "\25B2";
     color: var(--main-bg);
     font-size: var(--size-text-small);
 }
 
-.sort-arrow.selected, .monster-table th:hover .sort-arrow {
+.up .sort-arrow::after, :not(:is(.up, .down)) .sort-arrow::after {
+    content: "\25B2";
+}
+
+.down .sort-arrow::after{
+    content: "\25BC";
+}
+
+
+.selected .sort-arrow, .monster-table th:hover .sort-arrow {
     visibility: visible;
 }
 
 .monster-table th:hover .sort-arrow {
     background-color: var(--red);
-}
-
-.sort-arrow.up {
 }
 
 .monster-list-display {
@@ -421,7 +468,7 @@ p {
         "name level role role"
         "source size type type";
         grid-template-columns: 3fr 1fr 1fr 1fr;
-        grid-template-rows: var(--size-text) var(--size-text);
+        grid-template-rows: calc(var(--size-text)*1.2) calc(var(--size-text)*1.2);
         cursor: pointer;
     }
 
@@ -465,6 +512,10 @@ p {
 .head-size, .head-source, .head-page, .head-type {
     display: none;
 }
+
+
+
+
 
 
 
@@ -533,6 +584,8 @@ p {
 .search-input:focus {
     outline: 2px solid var(--red);
 }
+
+
 
 
 
