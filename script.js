@@ -14,6 +14,12 @@ let sortOrder = "ascending";
 let filteredMonsters = [];
 let searchText = "";
 
+let currentMonsters = {};
+
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
 
 
 
@@ -100,12 +106,12 @@ function fetchMonstersForPartyLevel(partyLevel, pageNumber) {
 		monsterRow.innerHTML = `
 		<td class="hoverable" colspan="7">
 		<div class="monster-list-display" onclick="addMonsterFromTable('${i}')">
-			<div class="monster-list-item item-level" style="grid-area: level"> ${level} </span> </div>
+			<div class="monster-list-item item-level" style="grid-area: level"> <p> ${level} </p> </div>
 			<div class="monster-list-item item-name" style="grid-area: name" title="${name}"> <p> ${name} </p> </div>
-			<div class="monster-list-item item-size" style="grid-area: size"> ${size} </div>
-			<div class="monster-list-item item-role" style="grid-area: role"> ${role} </div>
-			<div class="monster-list-item item-type" style="grid-area: type"> ${type} </div>
-			<div class="monster-list-item item-source" style="grid-area: source"> ${source}, page ${page} </div>
+			<div class="monster-list-item item-size" style="grid-area: size"> <p> ${size} </p> </div>
+			<div class="monster-list-item item-role" style="grid-area: role"> <p> ${role} </p> </div>
+			<div class="monster-list-item item-type" style="grid-area: type"> <p> ${type} </p> </div>
+			<div class="monster-list-item item-source" style="grid-area: source"> <p> ${source}, page ${page} </p> </div>
 		</div>
 		</td>
 		`;
@@ -369,13 +375,13 @@ function adjustMonsterTable() {
 /* Monster CR Calculating */
 
 const challengeTable = [
-  [0.5, 0.1, 1, 1.5],
+  [0.5, 0.1,  1,   1.5],
   [0.7, 0.15, 1.5, 2],
-  [1, 0.2, 2, 3],
-  [1.5, 0.3, 3, 4],
-  [2, 0.4, 4, 6],
-  [3, 0.6, 6, 8],
-  [4, 0.8, 8]
+  [1,   0.2,  2,   3],
+  [1.5, 0.3,  3,   4],
+  [2,   0.4,  4,   6],
+  [3,   0.6,  6,   8],
+  [4,   0.8,  8]
 ];
 
 function calculateChallengeFactor(partyLevel, monsterLevel, monsterInfo) {
@@ -389,6 +395,7 @@ function calculateChallengeFactor(partyLevel, monsterLevel, monsterInfo) {
     return -1;
   } else {
     row = levelDifference + 2;
+    console.log(row);
   }
 
   const monsterInfoLower = monsterInfo.toLowerCase();
@@ -447,31 +454,122 @@ function addMonsterFromTable(idNumber) {
 	let display = document.getElementById("display-result");	
 	let [level, name, size, role, type, source, page] = filteredMonsters[idNumber];
 
-	const monsterEntry = document.createElement("div");
-	monsterEntry.innerHTML = `
-	<div class="monster-generator-display">
-		<div class="monster-gen-item item-name" style="grid-area: name" title="${name}"> <p> ${name} </p> </div>
-		<div class="monster-gen-item item-info" style="grid-area: info"> <p>${size} ${suffixNum(level)} Level ${role} [${type}]</p>  </div>
-		<div class="monster-gen-item item-source" style="grid-area: source"> <p> ${source}, page ${page} </p> </div>
-	</div>
-	`;
-	document.getElementById("display-result").appendChild(monsterEntry);
+	if (name in currentMonsters) {
+		monsterEntry = currentMonsters[name];
+		incrementer = monsterEntry.querySelector(".increment").click();
+	}
+	else
+	{
+		const monsterEntry = document.createElement("div");
+		monsterEntry.innerHTML = `
+		<div class="monster-generator-display" data-level='${level}' data-size='${size}'>
+			<div class="monster-gen-item item-name" style="grid-area: name" title="${name}"> <p> ${name} </p> </div>
+			<div class="monster-gen-item item-info" style="grid-area: info"> <p>${size.toLowerCase() == "normal" ? "" : size} ${level}${suffixNum(level)} Level ${role} [${type}]</p>  </div>
+			<div class="monster-gen-item item-source" style="grid-area: source"> <p> ${source}, page ${page} </p> </div>
+			<div class="quantity-button" style="grid-area: qty">
+	        <button class="increment" onclick="increment(this)">+</button>
+	        <input type="number" class="quantity-input" value="1" min="1">
+	        <button class="decrement deleter" onclick="decrement(this)">x</button>
+	    </div>
+		</div>
+		`;
+		document.getElementById("display-result").appendChild(monsterEntry);
+		currentMonsters[name] = monsterEntry;
+	}
 }
 
 function suffixNum(i) {
     var j = i % 10,
         k = i % 100;
     if (j == 1 && k != 11) {
-        return i + "st";
+        return "st";
     }
     if (j == 2 && k != 12) {
-        return i + "nd";
+        return "nd";
     }
     if (j == 3 && k != 13) {
-        return i + "rd";
+        return "rd";
     }
-    return i + "th";
+    return "th";
 }
+
+function increment(object) {
+	currentNum = object.nextElementSibling;
+	currentNum.value++;
+
+	object.nextElementSibling.nextElementSibling.classList.remove("deleter");
+	object.nextElementSibling.nextElementSibling.innerHTML="&minus;";
+
+	getBattleRating();
+}
+
+async function decrement(object) {
+	let currentNum = object.previousElementSibling;
+	currentNum.value--;
+
+	if (currentNum.value == 1)
+	{
+		delay(0).then(() => {
+			object.innerHTML = "x";
+			object.classList.add("deleter");
+		});
+	}
+
+	if (currentNum.value == 0) {
+		let qb = currentNum.parentElement;
+		let grid = qb.parentElement;
+		let container = grid.parentElement;
+		let id = container.querySelector(".item-name p");
+		console.log("Deleting " + id.innerHTML);
+		container.style.cssText = `
+		transition: all 0.1s;
+		color: rgba(255,255,255,0) !important;
+		background-color = rgba(255,255,255,0) !important;
+		`;
+		grid.style.cssText = `
+		transition: all 0.2s;
+		height: 0;
+		`;
+		Array.from(qb.children).forEach(el => {
+			el.style.cssText = `
+				transition: all 0.1s;
+				color: rgba(255,255,255,0) !important;
+				background-color: rgba(255,255,255,0) !important;
+				border: none;
+				`;
+		})
+		await delay(200);
+		delete currentMonsters[id.innerHTML.trim()];
+		container.remove();
+		
+		console.log("Deleted " + id.innerHTML);
+	}
+
+	getBattleRating();
+}
+
+function validateNumericInput(object) {
+	if (this.value < 1) {
+		this.value = 1;
+	}
+}
+
+function getBattleRating() {	
+	let display = document.getElementById("display-result");	
+
+
+
+	display.querySelectorAll(".monster-generator-display").forEach(el => {
+		let monsterQty = el.querySelector(".quantity-input").value;
+		let monsterLevel = el.dataset.level;
+		let monsterInfo = el.dataset.size;
+		console.log(monsterQty * calculateChallengeFactor(groupLevel.value, monsterLevel, monsterInfo));
+	});
+}
+
+
+
+
 
 
 

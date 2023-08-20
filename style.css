@@ -60,11 +60,13 @@ h1 {
 
 h2 {
     font-size: calc(var(--size-text-large)/1.5);
-    margin-bottom: 1vh;
+    margin-bottom:1px;
 }
 
 p {
-    all: inherit;
+    font-size: inherit;
+    color: inherit;
+    overflow: inherit;
     line-height: normal;
 }
 
@@ -96,9 +98,8 @@ p {
     flex-grow: 1;
     margin: .5vh;
     background-color: var(--red-light);
-    border: 0 solid var(--border);
+    border: 1px solid var(--border);
     border-radius: var(--border-radius);
-    border-right-width: .6vh;
     border-bottom-width: .6vh;
 
     transition: border-width ease-in-out .2s, color ease-in-out .2s, background-color ease-in-out .2s;
@@ -109,15 +110,13 @@ p {
 .tab-button.selected {
     background-color: var(--main-bg);   
     color: var(--border); 
-    border: 0 solid var(--border);
-    border-top-width: .2vh;
-    border-left-width: .2vh;
+    border: 1px solid var(--border);
+    border-top-width: 2px;
 
     cursor: default;
 }
 
 .tab-button:hover:not(.selected) {
-    border-right-width: .5vh;
     border-bottom-width: .5vh;
 }
 
@@ -176,9 +175,15 @@ p {
 
 .player-group input {    
     background-color: var(--main-bg);
-    border: .1vh solid var(--border);
+    border: 1px solid var(--border);
+    border-bottom: .5vh solid;
     border-radius: .5vh;
     padding: .3em;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--red);
 }
 
 .group-players-label {
@@ -224,30 +229,33 @@ p {
 
 .battle-output select, .battle-output .generate {    
     padding: .3em;
-    border: .1vh solid #ccc;
+    border: 1px solid var(--border);
     border-radius: .5vh;   
     margin: 0;
+    cursor: pointer;
 }
 
 .battle-output .select-strength {
     width: 35%;
     height: 5vh;
     flex-grow: 7;
+    border-bottom: .5vh solid;
 }
 
 .battle-output .select-format {
     width: 40%;
     height: 5vh;
     flex-grow: 8;
+    border-bottom: .5vh solid;
 }
+
 
 .battle-output .generate {
     width: 10%;
     height: 5vh;
     background-color: var(--red-light);
-    border: 0 solid var(--border);
+    border: 1px solid var(--border);
     border-radius: var(--border-radius);
-    border-right-width: .6vh;
     border-bottom-width: .6vh;
 
     transition: border-width ease-in-out .2s;
@@ -256,7 +264,6 @@ p {
 }
 
 .battle-output .generate:hover {
-    border-right-width: .5vh;
     border-bottom-width: .5vh;
 }
 
@@ -269,43 +276,31 @@ p {
 }
 
 @keyframes clickedButton {
-    0% {    
-        background-color: var(--bg);   
-        color: var(--text);   
-        border: 0 solid var(--border);
-        border-right-width: .5vh;
+    0% {     
+        border: 1px solid var(--border);
         border-bottom-width: .5vh;
     }
-    35% {
-        background-color: var(--main-bg);   
-        color: var(--border); 
-        border: 0 solid var(--border);
-        border-top-width: .2vh;
-        border-left-width: .2vh;
+    35% { 
+        border: 1px solid var(--border);
+        border-top-width: 3px;
     }
-    65% {  
-        background-color: var(--main-bg);   
-        color: var(--border);  
-        border: 0 solid var(--border);
-        border-top-width: .2vh;
-        border-left-width: .2vh;
+    65% {    
+        border: 1px solid var(--border);
+        border-top-width: 3px;
     }
-    100% {
-        background-color: var(--bg);  
-        color: var(--text);  
-        border: 0 solid var(--border);
-        border-right-width: .5vh;
+    100% { 
+        border: 1px solid var(--border);
         border-bottom-width: .5vh;
     }
 }
 
 .battle-output .display-result {
     position: relative;
-    min-height: 40vh;
+    min-height: calc(var(--size-text) + (2 * var(--size-text-small)) + 0.3em);
     margin-top: 2vh;
     padding: .5em .5em;
     background-color: var(--bg);
-    border: .5vh var(--border) dashed;
+    border: 1px var(--border) solid;
     border-radius: var(--border-radius);
 }
 
@@ -314,15 +309,19 @@ p {
         width: 100%;
         height: calc(var(--size-text) + (2 * var(--size-text-small)) + 0.3em);
         grid-template-areas: 
-        "name qty del"
-        "info qty  del"
-        "source qty del";
-        grid-template-columns: 3fr 4em 1em;
+        "name qty"
+        "info qty"
+        "source qty";
+        grid-template-columns: 3fr 5em;
         grid-template-rows: var(--size-text) var(--size-text-small) var(--size-text-small);
         cursor: default;
         overflow: visible;
         grid-gap: 0.1em;
     }
+
+.display-result>div:last-child{
+    margin-bottom: 2em;
+}
 
 .monster-generator-display .item-name {
     font-size: var(--size-text);
@@ -338,9 +337,64 @@ p {
     overflow: visible;
 }
 
+.quantity-button {
+    display: flex;
+    flex-flow: row no-wrap;
+    width: auto;
+}
+
+.quantity-input {
+    text-align: center;
+}
+
+.quantity-button input {
+    flex-basis: 2em;
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-bottom-width: .5vh;
+}
 
 
+/* Chrome, Safari, Edge, Opera */
+.quantity-button input::-webkit-outer-spin-button,
+.quantity-button input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+/* Firefox */
+.quantity-button input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.quantity-button button {
+    flex-basis: 1.5em;
+    background-color: var(--red-light);
+    border: 1px solid var(--border);
+    border-bottom-width: .5vh;
+    cursor: pointer;
+    transition: color .25s ease-in-out, background-color .25s ease-in-out;
+    font-weight: bold;
+}
+
+.quantity-button button.deleter{
+    background-color: var(--red);
+    color: var(--main-bg);
+}
+
+.quantity-button button:hover {
+    border-bottom-width: .4vh;
+}
+
+.quantity-button button.increment {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.quantity-button button.decrement {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
 
 
 
@@ -349,7 +403,7 @@ p {
 
 
 .monster-table-container {
-    height: 32em;
+    height: 33em;
     background-color: var(--main-bg);
     border-radius: var(--border-radius);
     display: flex;
@@ -418,6 +472,7 @@ p {
 .sort-arrow{
     position: relative;
     display: inline-block;
+    vertical-align: text-bottom;
     visibility: hidden;
     background-color: var(--text);
     height: var(--size-text);
@@ -430,17 +485,17 @@ p {
     position: absolute;
     display: block;
 
-    width: 80%;
-    height: 80%;
+    width: var(--size-text);
+    height: var(--size-text);
 
-    margin-top: -35%;
-    margin-left: -40%;
+    margin-top: -50%;
+    margin-left: -50%;
 
     top: 50%;
     left: 50%;
 
     color: var(--main-bg);
-    font-size: var(--size-text-small);
+    font-size: var(--size-text);
 }
 
 .up .sort-arrow::after, :not(:is(.up, .down)) .sort-arrow::after {
@@ -463,23 +518,24 @@ p {
 .monster-list-display {
         display: grid;
         width: 100%;
-        height: 2em;
         grid-template-areas: 
         "name level role role"
         "source size type type";
         grid-template-columns: 3fr 1fr 1fr 1fr;
-        grid-template-rows: calc(var(--size-text)*1.2) calc(var(--size-text)*1.2);
+        grid-template-rows: calc(var(--size-text)*1.2) calc(var(--size-text-small)*1.2);
         cursor: pointer;
     }
 
 .monster-list-item{    
     width: inherit;
+    height: auto;
     text-overflow: ellipsis;
     transition: max-height 0.5s ease-in-out;
 }
 
 .monster-list-item:is(.item-name,.item-source){
     text-align: left;
+
 }
 
 .monster-list-item:is(.item-level, .item-size, .item-role, .item-type){
@@ -488,6 +544,7 @@ p {
 
 .monster-list-item:is(.item-source, .item-size, .item-type) {
     font-size: var(--size-text-small);
+    overflow: visible;
 }
 
 .item-name {
@@ -566,28 +623,73 @@ p {
 .search-container {
     display: flex;
     align-items: center;
-    padding: .3em;
+    padding: .5em;
     border-radius: var(--border-radius);
     margin-bottom: 2vh;
     background-color: var(--main-bg);
+    boder: 1px solid var(--border);
+    height: 2.5em;
 }
 
 .search-input {
     flex-grow: 1;
+    height: 2.5em;
     padding: .5em;
-    border: 0;
-    border-radius: var(--border-radius);
-    outline: 2px solid var(--border);
+    padding-left: 1.5em;
+    padding-bottom: calc(.5em - .5vh);
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    border: 1px solid var(--border);
+    border-right: none;
+    border-bottom: .5vh solid var(--border);
     font-size: var(--size-text);
+    background: left no-repeat url("https://assets.stickpng.com/thumbs/585e4ae1cb11b227491c3393.png");
+    background-size: 1em 1em;
+    background-clip: padding-box;
+    background-position: .25em;
+    flex-grow: 1;
+    box-sizing: border-box;
 }
 
-.search-input:focus {
-    outline: 2px solid var(--red);
+.search-container .filter {
+    padding: 0.5em;
+    background-color: var(--red-light);
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    border: 1px solid var(--border);
+    border-bottom: .5vh solid var(--border);
+    font-size: var(--size-text) ;
+    color: var(--text);
+    height: 2.5em;
+    box-sizing: border-box;
+    cursor: pointer;
 }
 
+.search-container .filter p {
+    border: none;
+    display: inline-block;
+    border-radius: 0;
+    padding: 0;
+    height: var(--size-text);
+    vertical-align: middle;
+}
 
+.search-container .filter svg{
+    display: inline-block;
+    height: calc(1.25 * var(--size-text));
+    margin: auto;
+    vertical-align: middle;
+}
 
+.search-container .filter:hover, .quantity-button button:hover {
+    border-bottom-width: .4vh;
+}
 
+.search-container .filter:focus, .quantity-button button:focus {
+    animation: clickedButton 0.2s ease-in-out;
+}
+
+.search-container .filter:active, .quantity-button button:active {
+    animation: none
+}
 
 
 
@@ -604,7 +706,7 @@ p {
     display: flex;
     justify-content: center;
     margin-bottom: 2vh;
-    margin-top: 1vh;
+    margin-top:1px;
     height: min(7vw, 5vh);
 }
 
