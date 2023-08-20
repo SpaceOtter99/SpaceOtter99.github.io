@@ -29,7 +29,7 @@
 			<div class="battle-output shadowed">
 				<div class="generator-options">
 				  <select class="select-strength" id="select-strength">
-		        <option value="single">Half Strength</option>
+		        <option value="half">Half Strength</option>
 		        <option value="single" selected>Single Strength</option>
 		        <option value="1.5x">1.5x Strength</option>
 		        <option value="double">Double Strength</option>
@@ -41,22 +41,26 @@
 		        <option value="random">Random</option>
 		        <option value="leader">Leader</option>
 		        <option value="leader-guards">Leader with Guards</option>
-		        <option value="symmetrical-duo">Symmetrical Duo</option>
-		        <option value="asymmetrical-duo">Asymmetrical Duo</option>
-		        <option value="symmetrical-trio">Symmetrical Trio</option>
-		        <option value="asymmetrical-trio">Asymmetrical Trio</option>
+		        <option value="sym-duo">Symmetrical Duo</option>
+		        <option value="asym-duo">Asymmetrical Duo</option>
+		        <option value="sym-trio">Symmetrical Trio</option>
+		        <option value="asym-trio">Asymmetrical Trio</option>
 		        <option value="horde">Horde</option>
 		    	</select>
 
-		    	<button class="generate">	&#8635; </button>
-		    </div>
+		    	<button class="generate" onclick="makeNewBattle()">	&#8635; </button>
 		    	<!-- Generated monster encounters will be displayed here as <div>s -->
-		    	<div class="display-result" id="display-result">
+	    	</div>
+	    	<div class="display-result" id="display-result">
 
 
 
-		    	</div>
-
+	    	</div>			
+				<div class="battle-stats" id="battle-stats">
+					<div style="grid-area: diff"> <p> Battle Strength: </p> </div>
+					<div id="battle-stats-qty" style="grid-area: num"> <p> 0 </p> </div>
+					<div style="grid-area: feel"> <p> No battle </p> </div>
+				</div>
 			</div>
 		</div>
 
@@ -69,7 +73,6 @@
 
 
 		<div class="monster-div tab noDisplay" id="monsters">
-
 			<div class="search-container">
 		    <input type="text" class="search-input" id="search-input" placeholder="Search...">
 		    <button class="filter" id="filter"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg> <p> Filter </p> </button>

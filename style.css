@@ -347,6 +347,10 @@ input:focus {
     text-align: center;
 }
 
+.strikethrough {
+    text-decoration: line-through;
+}
+
 .quantity-button input {
     flex-basis: 2em;
     border-radius: 0;
@@ -395,6 +399,33 @@ input:focus {
 .quantity-button button.decrement {
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
+
+.battle-stats {
+    display: grid;
+    grid-template-areas: 
+    "diff num"
+    "diff feel";
+    padding: 1em;
+    border-top: 1px var(--text) solid;
+    margin-top: 3vh;
+}
+
+.battle-stats div:first-child p {
+    font-size: var(--size-text);
+    vertical-align: middle;
+    padding-top: calc(var(--size-text-small) / 2);
+}
+
+.battle-stats div:not(:first-child){
+    text-align: right;
+}
+
+.battle-stats div:last-child p {
+    font-size: var(--size-text-small);
+}
+
+
+
 
 
 
