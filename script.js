@@ -109,6 +109,7 @@ function fetchMonstersForPartyLevel(partyLevel, pageNumber) {
 	monsterTbody.innerHTML = ""; // Clear existing table body
 
 	searchedFilteredMonsters = searchFilter(filteredMonsters, searchText)
+	workingMonsters = searchedFilteredMonsters.map((x) => [...x]);
 
 	const startIndex = (pageNumber - 1) * monstersPerPage;
 	const endIndex = Math.min(startIndex + monstersPerPage, searchedFilteredMonsters.length);
@@ -397,7 +398,7 @@ function calcPower(x) {
 		case  2: return 2;
 		case 3: return 3;
 		case 4: return 4;
-		default: return -1;
+		default: return 10000;
 	}
 	return to2dp(1 + (1/3)*x + (1/8)*Math.pow(x,2) + (1/24)*Math.pow(x,3));
 }
@@ -445,9 +446,10 @@ function calculateChallengeFactor(partyLevel, monsterLevel, monsterInfo) {
 
 /* Battle creation */
 function addMonsterFromTable(idNumber, qty) {
-	if (qty == undefined) { qty == 1; }
+	if (qty === undefined) { qty = 1; }
 	let display = document.getElementById("display-result");	
 	let [level, name, size, role, type, source, page] = searchedFilteredMonsters[idNumber];
+	workingMonsters.splice(workingMonsters.indexOf(searchedFilteredMonsters[idNumber]),1);
 
 	if (name in currentMonsters) {
 		currentMonsters[name].querySelector(".increment").click();
@@ -463,7 +465,7 @@ function addMonsterFromTable(idNumber, qty) {
 			<div class="quantity-button" style="grid-area: qty">
 	        <button class="increment" onclick="increment(this)">+</button>
 	        <input type="number" class="quantity-input" value="${qty}" min="1">
-	        <button class="decrement deleter" onclick="decrement(this)">x</button>
+	        <button class="decrement ${qty == 1 ? "deleter" : ""}" onclick="decrement(this)">${qty == 1 ? "x" : "&minus;"}</button>
 	    </div>
 		</div>
 		`;
@@ -549,6 +551,7 @@ function validateNumericInput(object) {
 function getBattleRating() {	
 	let display = document.getElementById("display-result");	
 	let battleVal = document.getElementById("battle-stats-qty");
+	let battleFeel = document.getElementById("battle-stats-feel");
 	let bVal = 0
 
 	display.querySelectorAll(".monster-generator-display").forEach(el => {
@@ -571,6 +574,76 @@ function getBattleRating() {
 	bVal = Math.round(bVal*20)/20
 
 	battleVal.innerHTML = bVal
+
+	let feel;
+
+	switch (true) {
+	case bVal <= 0.5:
+		feel = "Not a battle";
+		break;
+	case bVal <= 1.5:
+		feel = "Less than half-strength";
+		break;
+	case bVal <= 2.5:
+		feel = "Half-strength";
+		break;
+	case bVal <= 3.5:
+		feel = "Weak single-strength";
+		break;
+	case bVal <= 4.5:
+		feel = "Single-strength";
+		break;
+	case bVal <= 5.5:
+		feel = "Nasty single-strength";
+		break;
+	case bVal <= 6.5:
+		feel = "1.5x strength";
+		break;
+	case bVal <= 7.5:
+		feel = "Weak double-strength";
+		break;
+	case bVal <= 8.5: 
+		feel = "Double-Strength";
+		break;
+	case bVal <= 10:
+		feel = "Nasty double-strength";
+		break;
+	case bVal <= 11.5:
+		feel = "Weak triple-strength";
+		break;
+	case bVal <= 13:
+		feel = "Triple-strength";
+		break;
+	case bVal <= 14.5:
+		feel = "Nasty triple-strength";
+		break;
+	case bVal <= 15.5:
+		feel = "Weak quadruple-strength";
+		break;
+	case bVal <= 17.5:
+		feel = "Quadruple-strength";
+		break;
+	case bVal <= 18.5:
+		feel = "Nasty quadruple-strength";
+		break;
+	case bVal <= 23:
+		feel = "Worse than quadruple-strength";
+		break;
+	case bVal <= 25:
+		feel = "quintuple-strength";
+		break;
+	case bVal <= 30:
+		feel = "T.P.K.";
+	case bVal > 30:
+		feel = "Especially mean T.P.K.";
+		break;
+	default:
+		feel = "No battle";
+		break;
+	}
+
+	battleFeel.innerHTML = `<p> ${feel} </p>`;
+
 }
 
 
@@ -599,56 +672,123 @@ function makeNewBattle(){
 	if (partyLevel < 5) { mookDiv -= 1; }
 	if (partyLevel < 3) { mookDiv -= 1; }
 
-	workingMonsters = searchedFilteredMonsters;
-
-	console.log("|" + battleFormat.value + "|");
+	workingMonsters = searchedFilteredMonsters.map((x) => [...x]);
     
     switch(battleFormat.value) {
         case 'random':
             while (battleStrength > 0) {
             	let strength = randomIntFromInterval(1,battleStrength);
             	let id = getSingleRandomMonster(strength, partyLevel, true);
-            	let lvl = searchedFilteredMonsters[id][0];
+            	            	let lvl = searchedFilteredMonsters[id][0];
             	let size = searchedFilteredMonsters[id][2];
             	let type = searchedFilteredMonsters[id][3];
+            	let thisStrength = calculateChallengeFactor(partyLevel, lvl, size);
             	let qty = type.toLowerCase().includes("mook") ? mookDiv : 1;
-
-            	addMonsterFromTable(id, qty);
-            	battleStrength -= calculateChallengeFactor(partyLevel, lvl, size);
-            	console.log(battleStrength);
+            	let number = randomIntFromInterval(1, Math.max(1,Math.round(battleStrength / thisStrength)));
+            	if (number > 0 && number < 100) {
+	            	addMonsterFromTable(id, qty*number);
+	            	battleStrength -= (thisStrength * number);
+            	}
             }
             break;
             
         case 'leader':
-            // Code to handle 'Leader' option
+        	let id = getSingleRandomMonster(battleStrength, partyLevel, false);
+        	addMonsterFromTable(id);
             break;
             
         case 'leader-guards':
-            // Code to handle 'Leader with Guards' option
+        	let denom = randomIntFromInterval(2,5);
+        	let numer = randomIntFromInterval(Math.ceil(denom/2), denom-1);
+        	let leaderStrength = Math.floor(battleStrength * (numer / denom));
+        	let leaderId = getSingleRandomMonster(leaderStrength, partyLevel, false);
+        	addMonsterFromTable(leaderId);
+
+        	let lvl = searchedFilteredMonsters[leaderId][0];
+        	let size = searchedFilteredMonsters[leaderId][2];
+        	let remainingStrength = battleStrength - calculateChallengeFactor(partyLevel, lvl, size);
+
+        	let guardID;
+        	let number = -1;
+        	let type;
+        	let thisStrength;
+        	let qty;
+        	let iter = 0;
+        	while (number < 1)
+        	{
+        		iter++;
+        		guardID = getSingleRandomMonster(remainingStrength, partyLevel, true);
+	        	lvl = searchedFilteredMonsters[guardID][0];
+	        	size = searchedFilteredMonsters[guardID][2];
+	        	type = searchedFilteredMonsters[guardID][3];
+	        	thisStrength = calculateChallengeFactor(partyLevel, lvl, size);
+	        	qty = type.toLowerCase().includes("mook") ? mookDiv : 1;
+	        	number = remainingStrength / thisStrength;
+	        	if (iter == 100) { return; }
+	        }
+        	addMonsterFromTable(guardID, Math.round(qty * number));
             break;
             
         case 'sym-duo':
-            // Code to handle 'Symmetrical Duo' option
+        	let m1id = getSingleRandomMonster(battleStrength * 0.5, partyLevel, false);
+        	addMonsterFromTable(m1id);
+
+        	let m2id = getSingleRandomMonster(battleStrength * 0.5, partyLevel, false);
+        	addMonsterFromTable(m2id);
             break;
             
         case 'asym-duo':
-            // Code to handle 'Asymmetrical Duo' option
+	        let proportion = randomIntFromInterval(3,6);
+	        let bestStrength = Math.round(battleStrength * ((randomIntFromInterval(Math.ceil(proportion/1.9)), proportion - 1) / proportion));
+
+        	let asymLead = getSingleRandomMonster(bestStrength, partyLevel, false);
+        	addMonsterFromTable(asymLead);
+
+        	let alvl = searchedFilteredMonsters[asymLead][0];
+        	let asize = searchedFilteredMonsters[asymLead][2];
+        	let aremainingStrength = battleStrength - calculateChallengeFactor(partyLevel, alvl, asize);
+        	let secondId = getSingleRandomMonster(aremainingStrength, partyLevel, false);
+        	addMonsterFromTable(secondId);
             break;
             
-        case 'sym-trio':
-            // Code to handle 'Symmetrical Trio' option
+        case 'sym-trio':        	
+        	let t1id = getSingleRandomMonster(battleStrength * 0.333, partyLevel, false);
+        	addMonsterFromTable(t1id);
+
+        	let t2id = getSingleRandomMonster(battleStrength * 0.333, partyLevel, false);
+        	addMonsterFromTable(t2id);
+
+        	let t3id = getSingleRandomMonster(battleStrength * 0.333, partyLevel, false);
+        	addMonsterFromTable(t3id);
             break;
             
         case 'asym-trio':
-            // Code to handle 'Asymmetrical Trio' option
-            break;
+
+        	let tproportion = randomIntFromInterval(4,6);
+	        let tbestStrength = Math.round(battleStrength * ((randomIntFromInterval(Math.ceil(tproportion/2)), tproportion - 2) / tproportion));
+
+        	let at1id = getSingleRandomMonster(tbestStrength, partyLevel, false);
+        	addMonsterFromTable(at1id);
+
+        	let remTriStrength = Math.ceil((battleStrength - tbestStrength)/2);
+
+        	let at2id = getSingleRandomMonster(remTriStrength, partyLevel, false);
+        	addMonsterFromTable(at2id);
+
+        	let at3id = getSingleRandomMonster(remTriStrength, partyLevel, false);
+        	addMonsterFromTable(at3id);            
+        	break;
             
         case 'horde':
-            // Code to handle 'Horde' option
-            break;
-            
-        default:
-            // Default case
+        	let tempPartyLevel = randomIntFromInterval(Math.max(0,partyLevel - 2), partyLevel);
+        	let hordeStrength = Math.ceil((battleStrength / partySize) / 2);
+        	console.log(hordeStrength);
+        	let hid = getSingleRandomMonster(hordeStrength, tempPartyLevel, true);
+        	hordeStrength = calculateChallengeFactor(partyLevel, searchedFilteredMonsters[hid][0], searchedFilteredMonsters[hid][2]);
+        	if (searchedFilteredMonsters[hid][3].toLowerCase().includes("mook")) {
+        		hordeStrength /= mookDiv;
+        	}
+        	addMonsterFromTable(hid, Math.ceil(battleStrength / hordeStrength));
             break;
     }
 
@@ -665,15 +805,21 @@ function getSingleRandomMonster(challengeRating, partyLevel, allowMooks) {
 	let foundMonsters = [];
 	let nearest = 1000;
 	let monsterLevels = calculateMonsterLevels(challengeRating, partyLevel);
+	console.log(monsterLevels, challengeRating, partyLevel);
 
+		
 	workingMonsters.forEach(monster => 
 	{	
 		let [level, name, size, role, type, source, page] = monster;
 		let levelDiff;
 
-		let monStr = monster.join().toLowerCase();
-		if (allowMooks && monStr.includes("mook")) {
+		let monStr = monster.join(" ").toLowerCase();
+		if (monStr.includes("mook")) {
 			levelDiff = Math.abs(level - monsterLevels.mook)
+			if (!allowMooks)
+			{
+				levelDiff = (levelDiff + 2) * 1000;
+			}
 		} 
 		else if (monStr.includes("large") || monStr.includes("double-strength"))
 		{
@@ -681,7 +827,7 @@ function getSingleRandomMonster(challengeRating, partyLevel, allowMooks) {
 		}
 		else if (monStr.includes('huge') || monStr.includes("triple-strength")) 
 		{
-		  levelDiff = Math.abs(level - monsterLevels.huge)
+			levelDiff = Math.abs(level - monsterLevels.huge)
 		} 
 		else 
 		{
@@ -697,9 +843,19 @@ function getSingleRandomMonster(challengeRating, partyLevel, allowMooks) {
 		}
 	});
 
-	let selectedMonster = foundMonsters[Math.floor(Math.random()*foundMonsters.length)];
-	workingMonsters = workingMonsters.filter((monster) => monster != selectedMonster);
-	return searchedFilteredMonsters.indexOf(selectedMonster);
+	let monsterID = Math.floor(Math.random()*foundMonsters.length);
+	let selectedMonster = foundMonsters[monsterID];
+	workingMonsters.splice(workingMonsters.indexOf(selectedMonster), 1);
+	let tempLoop = 0;
+	let smonsterID = -1;
+	searchedFilteredMonsters.forEach((m) => {
+		if (m[1].toLowerCase() == selectedMonster[1].toLowerCase()) 
+			{ 
+				smonsterID = tempLoop;
+			}
+		tempLoop++
+		});
+	return smonsterID;
 }
 
 function calculateMonsterLevels(challengeRating, partyLevel) { 
@@ -742,7 +898,7 @@ function calculateMonsterLevels(challengeRating, partyLevel) {
 		{
 		    newPower *= 3;
 		}
-  		let difference = Math.abs(challengeRating - newPower);
+  		let difference = challengeRating - newPower < 0 ? Math.abs(challengeRating - newPower)-0.1 : challengeRating - newPower;
 
   		if (monsterLevels["d" + el] > difference)
   		{
