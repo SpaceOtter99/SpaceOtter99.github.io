@@ -13,6 +13,7 @@ let sortBy = "name";
 let sortOrder = "ascending";
 let filteredMonsters = [];
 let searchedFilteredMonsters = []
+let workingMonsters = []
 let searchText = "";
 
 function noFilt(x) {return true;}
@@ -389,7 +390,6 @@ function adjustMonsterTable() {
 /* Monster CR Calculating */
 function calcPower(x) {
 	switch(x) {
-		case -3: return 0.2;
 		case -2: return 0.5;
 		case -1: return 0.7;
 		case  0: return 1;
@@ -420,8 +420,8 @@ function calculateChallengeFactor(partyLevel, monsterLevel, monsterInfo) {
 
   let monsterInfoLower = monsterInfo.toLowerCase();
 
-  if (monsterInfoLower.includes('mook')) {
-    challengeFactor = Math.round((challengeFactor / mookDiv)*20)/20;
+  if (monsterInfoLower.includes('mook')){
+    challengeFactor = challengeFactor / mookDiv;
   } else if (monsterInfoLower.includes('large') || monsterInfoLower.includes("double-strength")) {
     challengeFactor *= 2;
   } else if (monsterInfoLower.includes('huge') || monsterInfoLower.includes("triple-strength")) {
@@ -431,52 +431,8 @@ function calculateChallengeFactor(partyLevel, monsterLevel, monsterInfo) {
   return challengeFactor;
 }
 
-function calculateMonsterLevels(challengeRating, partyLevel) {
 
-  if (partyLevel > 4) { partyLevel += 1; }  
-  if (partyLevel > 7) { partyLevel += 1; }
 
-  let mookDiv = 5;
-  if (partyLevel < 5) { mookDiv -= 1; }
-  if (partyLevel < 3) { mookDiv -= 1; }
-
-  let monsterLevels = {
-  mook: -1,
-  normal: -1,
-  large: -1,
-  huge: -1,
-  dmook: 100,
-  dnormal: 100,
-  dlarge: 100,
-  dhuge: 100
-  };
-
-  for (let i = 0; i < 20; i++) {
-  	let levelDifference = i - partyLevel;
-  	let power = calcPower(levelDifference);
-  	["mook", "normal", "large", "huge"].forEach(el => {
-  		let difference = Math.abs(challengeRating - power);
-  		let newPower = power;
- 			let monsterInfoLower = el;
-
-  		if (monsterInfoLower.includes('mook')) {
-		    newPower = newPower;
-		  } else if (monsterInfoLower.includes('large') || monsterInfoLower.includes("double-strength")) {
-		    newPower *= 2;
-		  } else if (monsterInfoLower.includes('huge') || monsterInfoLower.includes("triple-strength")) {
-		    newPower *= 3;
-		  }
-
-  		if (monsterLevels["d" + el] > difference)
-  		{
-  			monsterLevels["d" + el] = difference;
-  			monsterLevels[el] = newPower;
-  		}
-  	});
-  }
-
-return monsterLevels;
-}
 
 
 
@@ -488,7 +444,8 @@ return monsterLevels;
 
 
 /* Battle creation */
-function addMonsterFromTable(idNumber) {
+function addMonsterFromTable(idNumber, qty) {
+	if (qty == undefined) { qty == 1; }
 	let display = document.getElementById("display-result");	
 	let [level, name, size, role, type, source, page] = searchedFilteredMonsters[idNumber];
 
@@ -505,7 +462,7 @@ function addMonsterFromTable(idNumber) {
 			<div class="monster-gen-item item-source" style="grid-area: source"> <p> ${source}, page ${page} </p> </div>
 			<div class="quantity-button" style="grid-area: qty">
 	        <button class="increment" onclick="increment(this)">+</button>
-	        <input type="number" class="quantity-input" value="1" min="1">
+	        <input type="number" class="quantity-input" value="${qty}" min="1">
 	        <button class="decrement deleter" onclick="decrement(this)">x</button>
 	    </div>
 		</div>
@@ -599,7 +556,7 @@ function getBattleRating() {
 		let monsterLevel = el.dataset.level;
 		let monsterInfo = el.dataset.size;
 
-		let tempVal = to2dp(monsterQty.value * calculateChallengeFactor(groupLevel.value, monsterLevel, monsterInfo));
+		let tempVal = (monsterQty.value * calculateChallengeFactor(groupLevel.value, monsterLevel, monsterInfo));
 		bVal += Math.max(0,tempVal)
 
 		if (tempVal <= 0) {
@@ -610,6 +567,8 @@ function getBattleRating() {
 			monsterQty.classList.remove("strikethrough")			
 		}
 	});
+
+	bVal = Math.round(bVal*20)/20
 
 	battleVal.innerHTML = bVal
 }
@@ -632,13 +591,74 @@ function makeNewBattle(){
 	display.innerHTML = "";
 	getBattleRating();
 
-	let battleStrength = document.getElementById("select-strength");
+	let partyLevel = groupLevel.value;
+	let partySize = groupPlayers.value;
 	let battleFormat = document.getElementById("select-format");
+	let battleStrength = document.getElementById("select-strength").value * partySize;
+	let mookDiv = 5;
+	if (partyLevel < 5) { mookDiv -= 1; }
+	if (partyLevel < 3) { mookDiv -= 1; }
 
-	let x = getSingleRandomMonster(1, groupLevel.value, true);
-	addMonsterFromTable(x);
+	workingMonsters = searchedFilteredMonsters;
+
+	console.log("|" + battleFormat.value + "|");
+    
+    switch(battleFormat.value) {
+        case 'random':
+            while (battleStrength > 0) {
+            	let strength = randomIntFromInterval(1,battleStrength);
+            	let id = getSingleRandomMonster(strength, partyLevel, true);
+            	let lvl = searchedFilteredMonsters[id][0];
+            	let size = searchedFilteredMonsters[id][2];
+            	let type = searchedFilteredMonsters[id][3];
+            	let qty = type.toLowerCase().includes("mook") ? mookDiv : 1;
+
+            	addMonsterFromTable(id, qty);
+            	battleStrength -= calculateChallengeFactor(partyLevel, lvl, size);
+            	console.log(battleStrength);
+            }
+            break;
+            
+        case 'leader':
+            // Code to handle 'Leader' option
+            break;
+            
+        case 'leader-guards':
+            // Code to handle 'Leader with Guards' option
+            break;
+            
+        case 'sym-duo':
+            // Code to handle 'Symmetrical Duo' option
+            break;
+            
+        case 'asym-duo':
+            // Code to handle 'Asymmetrical Duo' option
+            break;
+            
+        case 'sym-trio':
+            // Code to handle 'Symmetrical Trio' option
+            break;
+            
+        case 'asym-trio':
+            // Code to handle 'Asymmetrical Trio' option
+            break;
+            
+        case 'horde':
+            // Code to handle 'Horde' option
+            break;
+            
+        default:
+            // Default case
+            break;
+    }
 
 
+	//let x = getSingleRandomMonster(1, partyLevel, true);
+	//addMonsterFromTable(x);
+}
+
+function randomIntFromInterval(min, max) { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 function getSingleRandomMonster(challengeRating, partyLevel, allowMooks) {
@@ -646,12 +666,12 @@ function getSingleRandomMonster(challengeRating, partyLevel, allowMooks) {
 	let nearest = 1000;
 	let monsterLevels = calculateMonsterLevels(challengeRating, partyLevel);
 
-	searchedFilteredMonsters.forEach(monster => 
+	workingMonsters.forEach(monster => 
 	{	
 		let [level, name, size, role, type, source, page] = monster;
 		let levelDiff;
 
-		let monStr = monster.join();
+		let monStr = monster.join().toLowerCase();
 		if (allowMooks && monStr.includes("mook")) {
 			levelDiff = Math.abs(level - monsterLevels.mook)
 		} 
@@ -677,10 +697,64 @@ function getSingleRandomMonster(challengeRating, partyLevel, allowMooks) {
 		}
 	});
 
-	console.log(challengeRating + "," + partyLevel + "," + nearest);
 	let selectedMonster = foundMonsters[Math.floor(Math.random()*foundMonsters.length)];
+	workingMonsters = workingMonsters.filter((monster) => monster != selectedMonster);
 	return searchedFilteredMonsters.indexOf(selectedMonster);
 }
+
+function calculateMonsterLevels(challengeRating, partyLevel) { 
+	/*
+  let mookDiv = 5;
+  if (partyLevel < 5) { mookDiv -= 1; }
+  if (partyLevel < 3) { mookDiv -= 1; }
+	*/
+  let workingPartyLevel = Number(partyLevel);
+  if (partyLevel > 7) { workingPartyLevel += 1; }
+  if (partyLevel > 4) { workingPartyLevel += 1; } 
+
+  let monsterLevels = {
+  mook: -1,
+  normal: -1,
+  large: -1,
+  huge: -1,
+  dmook: 100000,
+  dnormal: 100000,
+  dlarge: 100000,
+  dhuge: 100000
+  };
+
+  for (let potentialMonsterLevel = 0; potentialMonsterLevel < 20; potentialMonsterLevel++) {
+  	let levelDifference = potentialMonsterLevel - workingPartyLevel;
+  	let power = calcPower(levelDifference);
+  	["mook", "normal", "large", "huge"].forEach(el => {
+  		let newPower = power;
+ 		let monsterInfoLower = el;
+
+  		if (monsterInfoLower.includes('mook')) 
+  		{
+		    newPower = newPower;
+		} 
+		else if (monsterInfoLower.includes('large')) 
+		{
+		    newPower *= 2;
+		} 
+		else if (monsterInfoLower.includes('huge')) 
+		{
+		    newPower *= 3;
+		}
+  		let difference = Math.abs(challengeRating - newPower);
+
+  		if (monsterLevels["d" + el] > difference)
+  		{
+  			monsterLevels["d" + el] = difference;
+  			monsterLevels[el] = potentialMonsterLevel;
+  		}
+  	});
+  }
+
+return monsterLevels;
+}
+
 
 
 
