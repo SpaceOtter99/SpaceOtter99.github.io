@@ -47,7 +47,6 @@ async function fetchMonstersCSV() {
 		.then(response => response.text())
 		.then(data => {
 			monstersData = data.split("\n").map(line => parseCSVLine(line));
-			monsterData = monstersData.filter((x) => (x[1] != undefined && x[1] != "undefined"));
 			sortAndFilterMonsters();
 		})
 		.catch(error => {
@@ -942,6 +941,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	fetchMonstersCSV()	
 	.then(async function() {await delay(20);})
 	.then(function() {
+	monsterData = monstersData.filter((x) => (x[1] !== undefined));
 	updateMonsterList();
 	adjustMonsterTable();
 	});
