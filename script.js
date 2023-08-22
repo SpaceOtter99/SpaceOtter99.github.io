@@ -42,7 +42,7 @@ function delay(time) {
 
 /* Fetch Monster Data*/
 
-function fetchMonstersCSV() {
+async function fetchMonstersCSV() {
 	return fetch("monsters.csv")
 		.then(response => response.text())
 		.then(data => {
@@ -926,8 +926,6 @@ return monsterLevels;
 
 /* On page load */
 
-window.onload=setTimeout(updateMonsterList, 20);
-window.onload=setTimeout(adjustMonsterTable, 20);
 window.onresize=adjustMonsterTable;
 adjustMonsterTable();
 
@@ -937,9 +935,16 @@ document.addEventListener("DOMContentLoaded", () => {
 	const groupPlayers = document.getElementById("group-players");
 	const monsterList = document.getElementById("monster-list");
 	const searchInput = document.getElementById("search-input");
-
-	fetchMonstersCSV();
+	
 	adjustMonsterTable();
+
+	fetchMonstersCSV()	
+	.then(async function() {await delay(20);})
+	.then(function() {
+	updateMonsterList();
+	adjustMonsterTable();
+	});
+
 
 	groupLevel.addEventListener("change", (event) => {
 		updateMonsterList();
