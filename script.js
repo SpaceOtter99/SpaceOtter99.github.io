@@ -941,7 +941,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	fetchMonstersCSV()	
 	.then(async function() {await delay(20);})
 	.then(function() {
-	monsterData = monstersData.filter((x) => (x[1] !== undefined));
+	monsterData = monstersData.filter((x) => (x !== undefined));
+	console.log(monstersData);
 	updateMonsterList();
 	adjustMonsterTable();
 	});
