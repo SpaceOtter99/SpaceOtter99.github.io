@@ -34,7 +34,7 @@
 
 * {    
   white-space: nowrap;
-  overflow: hidden;
+  overflow: visible;
   font-size: inherit;
   text-overflow: inherit;
 }
@@ -371,6 +371,7 @@ input:focus {
 /* Firefox */
 .quantity-button input[type=number] {
   -moz-appearance: textfield;
+  overflow: hidden;
 }
 
 .quantity-button button {
@@ -448,7 +449,7 @@ input:focus {
 
 .monster-table th, .monster-table td {
     white-space: nowrap;
-    overflow: hidden;
+    overflow: visible;
     transition: color ease-out .15s, background-color ease-in-out .15s;
     height: calc(var(--size-text) + var(--size-text-small));
     vertical-align: middle;
@@ -768,6 +769,62 @@ input:focus {
     cursor: default;
     height: min(7vw, 5vh);
     flex-basis: min(7vw, 5vh);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Tooltips */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+  cursor: help;
+}
+
+.tooltip .tooltiptext {
+  background-color: rgba(0,0,0,.9);
+  color: #fff;
+  text-align: center;
+  border-radius: var(--border-radius);
+  padding: .5em;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 0%;
+  font-size: var(--size-text);
+
+  opacity: 0;
+  transition: opacity 0.25s ease-in;
+
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: calc(var(--border-radius) + .5em - 50% );
+  border-width: .5em;
+  border-style: solid;
+  border-color: rgba(0,0,0,.9) transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  opacity: 1;
+}
+
+.battle-abbreviations {
+    font-size: var(--size-text-small);
 }
 
 

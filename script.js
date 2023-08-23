@@ -16,6 +16,8 @@ let searchedFilteredMonsters = []
 let workingMonsters = []
 let searchText = "";
 
+let knownAbbreviations = {};
+
 function noFilt(x) {return true;}
 
 let filterStack = {
@@ -126,7 +128,7 @@ function fetchMonstersForPartyLevel(partyLevel, pageNumber) {
 			<div class="monster-list-item item-size" style="grid-area: size"> <p> ${size} </p> </div>
 			<div class="monster-list-item item-role" style="grid-area: role"> <p> ${role} </p> </div>
 			<div class="monster-list-item item-type" style="grid-area: type"> <p> ${type} </p> </div>
-			<div class="monster-list-item item-source" style="grid-area: source"> <p> ${source}, page ${page} </p> </div>
+			<div class="monster-list-item item-source" style="grid-area: source"> <p class="tooltip"> ${getInitials(source)} p${page} <span class="tooltiptext"> ${source}, page ${page} </span></p> </div>
 		</div>
 		</td>
 		`;
@@ -169,9 +171,14 @@ function sortMainList(mainList, sortBy, sortOrder) {
     const categories = ["level", "name", "size", "role", "type", "source", "page"];
         
     mainList.sort((a, b) => {
-        const valueA = a[categories.indexOf(sortBy)];
-        const valueB = b[categories.indexOf(sortBy)];
+    	sortIndex = categories.indexOf(sortBy)
+        let valueA = a[sortIndex];
+        let valueB = b[sortIndex];
 
+        if (sortIndex == 0) {
+        	valueA = Number(valueA);
+        	valueB = Number(valueB);
+        }
 
         if (sortOrder === "ascending") {
             return comparison(valueA, valueB);
@@ -399,7 +406,7 @@ function calcPower(x) {
 		case  2: return 2;
 		case 3: return 3;
 		case 4: return 4;
-		default: return 10000;
+		default: return x < 0 ? 0 : 1.25 * x;
 	}
 	return to2dp(1 + (1/3)*x + (1/8)*Math.pow(x,2) + (1/24)*Math.pow(x,3));
 }
@@ -462,7 +469,7 @@ function addMonsterFromTable(idNumber, qty) {
 		<div class="monster-generator-display" data-level='${level}' data-size='${size} ${role}'>
 			<div class="monster-gen-item item-name" style="grid-area: name" title="${name}"> <p> ${name} </p> </div>
 			<div class="monster-gen-item item-info" style="grid-area: info"> <p>${size.toLowerCase() == "normal" ? "" : size} ${level}${suffixNum(level)} Level ${role} [${type}]</p>  </div>
-			<div class="monster-gen-item item-source" style="grid-area: source"> <p> ${source}, page ${page} </p> </div>
+			<div class="monster-gen-item item-source" style="grid-area: source"> <p class="tooltip"> ${getInitials(source)} p${page} <span class="tooltiptext"> ${source}, page ${page} </span> </p> </div>
 			<div class="quantity-button" style="grid-area: qty">
 	        <button class="increment" onclick="increment(this)">+</button>
 	        <input type="number" class="quantity-input" value="${qty}" min="1">
@@ -474,6 +481,14 @@ function addMonsterFromTable(idNumber, qty) {
 		currentMonsters[name] = monsterEntry;
 	}
 	getBattleRating();
+}
+
+function getInitials(str){
+	const words = str.split(' ');
+    const initials = words.map(word => word.charAt(0));
+    const output = initials.join('');
+    knownAbbreviations[output] = str;
+    return output;
 }
 
 function suffixNum(i) {
@@ -553,6 +568,7 @@ function getBattleRating() {
 	let display = document.getElementById("display-result");	
 	let battleVal = document.getElementById("battle-stats-qty");
 	let battleFeel = document.getElementById("battle-stats-feel");
+	let abbreviations = document.getElementById("battle-abbreviations");
 	let bVal = 0
 
 	display.querySelectorAll(".monster-generator-display").forEach(el => {
@@ -633,9 +649,9 @@ function getBattleRating() {
 	case bVal <= 25:
 		feel = "quintuple-strength";
 		break;
-	case bVal <= 30:
+	case bVal <= 35:
 		feel = "T.P.K.";
-	case bVal > 30:
+	case bVal > 35:
 		feel = "Especially mean T.P.K.";
 		break;
 	default:
@@ -644,6 +660,11 @@ function getBattleRating() {
 	}
 
 	battleFeel.innerHTML = `<p> ${feel} </p>`;
+
+	abbreviations.innerHTML = "Abbreviations: <br>";
+	for (let [key, value] of Object.entries(knownAbbreviations)) {
+	    abbreviations.innerHTML += key + " - " + value + "<br>";
+	}
 
 }
 
@@ -718,13 +739,13 @@ function makeNewBattle(){
         	while (number < 1)
         	{
         		iter++;
-        		guardID = getSingleRandomMonster(remainingStrength, partyLevel, true);
+        		guardID = getSingleRandomMonster(remainingStrength/3, partyLevel, true);
 	        	lvl = searchedFilteredMonsters[guardID][0];
 	        	size = searchedFilteredMonsters[guardID][2];
 	        	type = searchedFilteredMonsters[guardID][3];
 	        	thisStrength = calculateChallengeFactor(partyLevel, lvl, size);
 	        	qty = type.toLowerCase().includes("mook") ? mookDiv : 1;
-	        	number = remainingStrength / thisStrength;
+	        	number = Math.round(remainingStrength / thisStrength);
 	        	if (iter == 100) { return; }
 	        }
         	addMonsterFromTable(guardID, Math.round(qty * number));
@@ -816,7 +837,7 @@ function getSingleRandomMonster(challengeRating, partyLevel, allowMooks) {
 
 		let monStr = monster.join(" ").toLowerCase();
 		if (monStr.includes("mook")) {
-			levelDiff = Math.abs(level - monsterLevels.mook)
+			levelDiff = Math.abs(level - monsterLevels.mook) + monsterLevels.dmook;
 			if (!allowMooks)
 			{
 				levelDiff = (levelDiff + 2) * 1000;
@@ -824,15 +845,15 @@ function getSingleRandomMonster(challengeRating, partyLevel, allowMooks) {
 		} 
 		else if (monStr.includes("large") || monStr.includes("double-strength"))
 		{
-			levelDiff = Math.abs(level - monsterLevels.large)
+			levelDiff = Math.abs(level - monsterLevels.large) + monsterLevels.dlarge;
 		}
 		else if (monStr.includes('huge') || monStr.includes("triple-strength")) 
 		{
-			levelDiff = Math.abs(level - monsterLevels.huge)
+			levelDiff = Math.abs(level - monsterLevels.huge) + monsterLevels.dhuge;
 		} 
 		else 
 		{
-			levelDiff = Math.abs(level - monsterLevels.normal);
+			levelDiff = Math.abs(level - monsterLevels.normal) + monsterLevels.dnormal;
 		}
 
 		if (levelDiff < nearest) {
@@ -942,8 +963,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	fetchMonstersCSV()	
 	.then(async function() {await delay(20);})
 	.then(function() {
-	monsterData = monstersData.filter((x) => (x.length == 8));
-	console.log(monstersData);
 	updateMonsterList();
 	adjustMonsterTable();
 	});
