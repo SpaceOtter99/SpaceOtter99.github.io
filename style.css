@@ -806,6 +806,7 @@ input:focus {
   opacity: 0;
   transition: opacity 0.25s ease-in;
 
+  pointer-events: none;
 }
 
 .tooltip .tooltiptext::after {
@@ -820,13 +821,26 @@ input:focus {
 }
 
 .tooltip:hover .tooltiptext {
-  opacity: 1;
+  animation: fadeIn 0.25s ease-in-out forwards;
 }
 
 .battle-abbreviations {
     font-size: var(--size-text-small);
 }
 
-
+@keyframes fadeIn {
+    from {
+        visibility: hidden;
+        opacity: 0;
+    }
+    1% {
+        visibility: visible;
+        opacity: 0;
+    }
+    to {
+        visibility: visible;
+        opacity: 1;
+    }
+}
 
 
