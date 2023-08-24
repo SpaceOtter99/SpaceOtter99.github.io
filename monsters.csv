@@ -876,3 +876,127 @@
 14, Star-Brain Dungeon Heart, Huge, Wrecker, Aberration, Bestiary 2,262
 14, The Forest That Walks, Huge, Spoiler, Beast, Bestiary 2,91
 15, Tarrasque, Huge, Wrecker, Beast, Bestiary,201
+3,"Molting Owlbear",Double-strength,wrecker,humanoid,The Crown Commands,60
+4,"Owlbear Cub",Normal,wrecker,humanoid,The Crown Commands,60
+2,"Wood Elf",Normal,spoiler,beast,The Crown Commands,64
+3,"Forest Hunger-Spirit",Normal,troop,humanoid,The Crown Commands,64
+3,"Redcap",Double-strength,archer,humanoid,The Crown Commands,64
+2,"Corrupted Forest Spirit",Normal,troop,construct,The Crown Commands,70
+4,"Mist Monster",Normal,troop,humanoid,The Crown Commands,70
+5,"Drow Spider-Sorceress",Normal,troop,construct,The Crown Commands,72
+5,"Drow Darkbolt",Large,wrecker,giant,The Crown Commands,73
+5,"Drow Cavalry",Normal,archer,construct,The Crown Commands,73
+4,"Spider Mount",Normal,troop,humanoid,The Crown Commands,73
+7,"Ulla the Hag",Large,archer,giant,The Crown Commands,76
+9,"Monstrous Topiary",Double-strength,wrecker,humanoid,The Crown Commands,77
+8,"Drow Blood Thrall",Normal,troop,humanoid,The Crown Commands,77
+9,"Crustycap",Normal,wrecker,elemental,The Crown Commands,77
+10,"Djinn Prince",Large,leader,giant,The Crown Commands,83
+8,"Redscale Reaver",Large,wrecker,giant,The Crown Commands,83
+10,"Shadowscale Assassin",Large,wrecker,dragon,The Crown Commands,83
+9,"Quarvolg, Huge Green Dragon",Large,mook,humanoid,The Crown Commands,86
+10,"Blue Sorcerer Master (Kobold)",Large,wrecker,construct,The Crown Commands,86
+3,"Blackscale Spitter",Double-strength,leader,plant,The Crown Commands,87
+3,"Green Wyrmling",Normal,mook,plant,The Crown Commands,87
+3,"Drow Joker Blade",Large,troop,beast,The Crown Commands,93
+3,"Drow Joker Spellslinger",Normal,wrecker,humanoid,The Crown Commands,93
+6,"Weaver Swarm",Normal,spoiler,humanoid,The Crown Commands,93
+3,"Half-orc Mercenary",Normal,mook,humanoid,The Crown Commands,96
+3,"Half-orc Lizard Trainer",Normal,wrecker,humanoid,The Crown Commands,96
+4,"Snapper",Normal,spoiler,undead,The Crown Commands,96
+8,"Larst,Wererat Pack Leader",Huge,spoiler,elemental,The Crown Commands,99
+7,"Wererat Sneak",Normal,mook,elemental,The Crown Commands,99
+6,"Gelatinous Tetrahedron",Normal,caster,humanoid,The Crown Commands,99
+7,"Human Malcontent",Normal,archer,humanoid,The Crown Commands,102
+6,"Tarius Rolle, Honey Devil",Normal,troop,beast,The Crown Commands,102
+6,"Bearded Devil (Barbazu)",Normal,spoiler,humanoid,The Crown Commands,102
+6,"Ols Maksun, Werebear Druid",Normal,mook,humanoid,The Crown Commands,107
+7,"Cave Bear",Normal,wrecker,humanoid,The Crown Commands,107
+9,"Dust Devil",Large,wrecker,construct,The Crown Commands,107
+13,"Ettin",Normal,mook,humanoid,The Crown Commands,109
+13,"Hobgoblin Champion",Huge,spoiler,dragon,The Crown Commands,109
+5,"Hobgoblin Elite Warrior",Normal,caster,humanoid,The Crown Commands,109
+5,"Drow Sword Adept",Normal,leader,humanoid,The Crown Commands,112
+4,"Kelm, Dragonic Champion",Normal,mook,beast,The Crown Commands,113
+4,"Elastor Var, Necromancer",Huge,blocker,ooze,The Crown Commands,113
+4,"Wraith",Normal,troop,humanoid,The Crown Commands,114
+4,"Specter",Normal,troop,devil,The Crown Commands,114
+5,"Evra, Master of Gladiators",Large,caster,humanoid,The Crown Commands,119
+6,"House Guard",Normal,mook,elemental,The Crown Commands,119
+7,"Gladiator-in-Training",Large,wrecker,beast,The Crown Commands,119
+5,"Pheliria, Necromancer",Large,troop,giant,The Crown Commands,122
+6,"Gladiator Champion Bodyguard",Normal,leader,humanoid,The Crown Commands,122
+5,"Alchemical Wight",Normal,troop,humanoid,The Crown Commands,122
+6,"Pheliria, Necromancer",Double-strength,troop,humanoid,The Crown Commands,125
+7,"Xavius, Death Knight",Normal,caster,humanoid,The Crown Commands,125
+8,"Deathshard Skeleton",Double-strength,wrecker,humanoid,The Crown Commands,125
+6,"Dread Specter",Double-strength,wrecker,undead,The Crown Commands,126
+11,"Skeletal Guardian",Normal,troop,humanoid,The Crown Commands,131
+11,"Skeletal Priest",Normal,mook,humanoid,The Crown Commands,131
+11,"Hungry Ghoul",Triple-strength,wrecker,humanoid,The Crown Commands,135
+10,"Ghoul Pusbuster",Normal,spoiler,undead,The Crown Commands,135
+11,"Death Acolyte",Normal,mook,undead,The Crown Commands,138
+9,"Death Priest Wight",Triple-strength,wrecker,undead,The Crown Commands,138
+2,"Martuk, Death Priest Wight",Normal,troop,undead,The Crown Commands,138
+3,"Restless Dead",Normal,spoiler,undead,The Crown Commands,141
+2,"Wormtongue Zombie",Normal,spoiler,undead,The Crown Commands,141
+2,"Greater Wraith",Normal,spoiler,undead,The Crown Commands,146
+4,"Wraith",Normal,spoiler,undead,The Crown Commands,146
+2,"Wight",Normal,mook,undead,The Crown Commands,146
+2,"Zombie Drider",Double-strength,archer,undead,The Crown Commands,149
+3,"Drow Wight",Normal,mook,undead,The Crown Commands,149
+7,"Kythiss’nar, Bone Naga",Normal,spoiler,undead,The Crown Commands,152
+4,"Flaming Skull",Normal,spoiler,undead,The Crown Commands,152
+7,"Skeletal Guardian",Large,spoiler,undead,The Crown Commands,152
+5,"Cornellion, Lich Count",Normal,caster,undead,The Crown Commands,156
+5,"Mirror Golem",Normal,mook,undead,The Crown Commands,156
+8,"Fossilized Skeleton",Double-strength,spoiler,undead,The Crown Commands,156
+6,"Wyvern Ghoul",Normal,blocker,construct,The Crown Commands,161
+5,"Zombie Slave",Normal,mook,undead,The Crown Commands,161
+10,"Spawn of the Master",Large,wrecker,undead,The Crown Commands,161
+9,"Kolaris, Medusa Noble",Normal,troop,undead,The Crown Commands,165
+10,"Nalfazar, Knight of the Crimson Rose",Normal,mook,undead,The Crown Commands,166
+11,"Spawn of the Master",Double-strength,caster,humanoid,The Crown Commands,166
+10,"Rahlia, Vampire Lord",Normal,mook,undead,The Crown Commands,169
+11,"Zombie Slave",Double-strength,spoiler,undead,The Crown Commands,170
+9,"Elder Blood Rose",Normal,troop,undead,The Crown Commands,170
+10,"Elder Death Blossom",Double-strength,wrecker,plant,The Crown Commands,170
+11,"Rahlia, Vampire Lord",Double-strength,spoiler,undead,The Crown Commands,174
+9,"Navernos Wraith",Normal,spoiler,undead,The Crown Commands,174
+10,"Spawn of the Master",Normal,mook,undead,The Crown Commands,174
+3,"Malsurn",Normal,spoiler,humanoid,The Crown Commands,13
+2,"Dwarven Warrior",Normal,troop,humanoid,The Crown Commands,13
+4,"Celeste",Normal,wrecker,humanoid,The Crown Commands,17
+2,"Hired Thug",Normal,spoiler,beast,The Crown Commands,17
+2,"Dwarf Housecarls",Normal,mook,humanoid,The Crown Commands,20
+3,"Cyclops Assistant",Normal,troop,humanoid,The Crown Commands,33
+3,"Gearwork Champion",Double-strength,archer,humanoid,The Crown Commands,33
+2,"Gearwork Dwarf",Normal,troop,construct,The Crown Commands,33
+4,"Drow Wizard",Normal,troop,humanoid,The Crown Commands,39
+5,"Ogre Bucket Brigadier",Normal,troop,construct,The Crown Commands,42
+5,"Molting Owlbear",Large,wrecker,giant,The Crown Commands,60
+5,"Owlbear Cub",Normal,archer,construct,The Crown Commands,60
+4,"Drow Cavalry",Normal,troop,humanoid,The Crown Commands,73
+7,"Spider Mount",Large,archer,giant,The Crown Commands,73
+5,"Djinn Prince",Large,troop,giant,The Crown Commands,83
+5,"Redscale Reaver",Normal,mook,construct,The Crown Commands,83
+9,"Blue Sorcerer Master (Kobold)",Double-strength,wrecker,humanoid,The Crown Commands,86
+6,"Blackscale Spitter",Normal,troop,beast,The Crown Commands,87
+10,"Green Wyrmling",Normal,caster,humanoid,The Crown Commands,87
+8,"Drow Joker Blade",Normal,troop,humanoid,The Crown Commands,93
+9,"Weaver Swarm",Large,mook,humanoid,The Crown Commands,93
+9,"Half-orc Mercenary",Normal,wrecker,elemental,The Crown Commands,96
+10,"Snapper",Large,leader,giant,The Crown Commands,96
+8,"Larst,Wererat Pack Leader",Large,wrecker,giant,The Crown Commands,99
+10,"Bearded Devil (Barbazu)",Large,wrecker,dragon,The Crown Commands,102
+9,"Wraith",Large,mook,humanoid,The Crown Commands,114
+10,"Pheliria, Necromancer",Large,wrecker,construct,The Crown Commands,122
+3,"Gladiator Champion Bodyguard",Double-strength,leader,plant,The Crown Commands,122
+3,"Pheliria, Necromancer",Normal,mook,plant,The Crown Commands,125
+3,"Xavius, Death Knight",Normal,wrecker,humanoid,The Crown Commands,125
+6,"Ghoul Pusbuster",Normal,spoiler,humanoid,The Crown Commands,135
+4,"Wraith",Large,spoiler,beast,The Crown Commands,146
+4,"Zombie Drider",Normal,mook,beast,The Crown Commands,149
+3,"Drow Wight",Normal,mook,humanoid,The Crown Commands,149
+3,"Nalfazar, Knight of the Crimson Rose",Normal,wrecker,humanoid,The Crown Commands,166
+4,"Elder Death Blossom",Normal,spoiler,undead,The Crown Commands,170
